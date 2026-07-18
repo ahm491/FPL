@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>غرفة عمليات الفانتزي — FPL 2026/27</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1E293B; --muted:#64748B; --line:#E2E8F0; --gold:#C99A3B;
+  --good:#15803D; --warn:#D97706; --bad:#DC2626; --blue:#2563EB; --purple:#7C3AED;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans Arabic','Segoe UI',sans-serif;background:#F1F5F9;color:var(--ink);font-size:14px}
+.topbar{
+  background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 2px,transparent 2px 10px),
+  linear-gradient(135deg,#0F172A,#1E293B 52%,#334155);
+  border-bottom:3px solid var(--gold);
+  padding:12px 22px 0;position:sticky;top:0;z-index:50;
+}
+.tb-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-bottom:10px}
+.topbar h1{color:#fff;font-size:17px;font-weight:800}
+.vpill{background:var(--gold);color:#0F172A;font-weight:700;font-size:11px;padding:3px 10px;border-radius:999px}
+.nav{display:flex;gap:4px;flex-wrap:wrap}
+.nav button{background:transparent;border:0;border-bottom:3px solid transparent;color:#CBD5E1;padding:9px 14px;font-family:inherit;font-size:12.5px;font-weight:800;cursor:pointer}
+.nav button.on{color:#fff;border-bottom-color:var(--gold)}
+.view{display:none}
+.view.on{display:block}
+.dash{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 14px rgba(15,23,42,.06);max-width:1280px;margin:22px auto;padding:22px}
+.sec-title{font-size:16px;font-weight:800;margin:6px 0 4px;display:flex;align-items:center;gap:8px}
+.sec-title::before{content:"";width:10px;height:22px;background:var(--gold);border-radius:3px;display:inline-block}
+.sec-sub{color:var(--muted);font-size:12.5px;margin-bottom:14px;line-height:1.7}
+.grid{display:grid;gap:12px}
+.g3{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.card{background:#fff;border:1px solid var(--line);border-top:3px solid #1E293B;border-radius:10px;padding:14px}
+.card.gold{border-top-color:var(--gold)}.card.good{border-top-color:var(--good)}
+.card.warn{border-top-color:var(--warn)}.card.bad{border-top-color:var(--bad)}
+.card.blue{border-top-color:var(--blue)}.card.purple{border-top-color:var(--purple)}
+.card h3{font-size:13.5px;font-weight:700;margin-bottom:6px}
+.card .big{font-size:22px;font-weight:800}
+.card p{color:var(--muted);font-size:12px;line-height:1.75}
+.chip{display:inline-block;padding:2px 10px;border-radius:999px;font-size:11px;font-weight:700;border:1px solid;white-space:nowrap}
+.chip.good{background:#DCFCE7;color:#15803D;border-color:#BBF7D0}
+.chip.weak{background:#F4E9CE;color:#A16207;border-color:#F0E2BF}
+.chip.risk{background:#FFEDD5;color:#D97706;border-color:#FED7AA}
+.chip.critical{background:#FEE2E2;color:#DC2626;border-color:#FECACA}
+.chip.idle{background:#F1F5F9;color:#64748B;border-color:#E2E8F0}
+.chip.ended{background:#EDE9FE;color:#7C3AED;border-color:#DDD6FE}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0 14px;padding:12px;background:#F8FAFC;border:1px solid var(--line);border-radius:10px}
+.controls .lbl{font-size:11.5px;font-weight:700;color:var(--muted)}
+.fbtn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;color:var(--ink)}
+.fbtn.on{background:#1E293B;color:#fff;border-color:#1E293B}
+.fbtn.gold.on{background:var(--gold);color:#0F172A;border-color:var(--gold)}
+.vtab{border:1px solid var(--line);background:#fff;padding:8px 18px;font-family:inherit;font-size:12.5px;font-weight:800;cursor:pointer;color:var(--muted)}
+.vtab:first-child{border-radius:0 8px 8px 0}
+.vtab:last-child{border-radius:8px 0 0 8px}
+.vtab.on{background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 2px,transparent 2px 10px),linear-gradient(135deg,#0F172A,#1E293B 52%,#334155);color:#fff;border-color:#1E293B}
+select,input[type=text]{border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-family:inherit;font-size:12.5px;background:#fff;color:var(--ink)}
+.twrap{overflow:auto;border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;min-width:1000px}
+thead th{
+  background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 2px,transparent 2px 10px),
+  linear-gradient(135deg,#0F172A,#1E293B 52%,#334155);
+  color:#fff;font-size:11.5px;font-weight:700;padding:10px 8px;border-bottom:2px solid var(--gold);text-align:center;white-space:nowrap;cursor:pointer;user-select:none
+}
+thead th .arr{color:var(--gold)}
+tbody td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:center;font-size:12.3px}
+tbody tr:nth-child(even){background:#F8FAFC}
+tbody td.pname{font-weight:700;text-align:start;white-space:nowrap}
+tbody td.notes,tbody td.fx{text-align:start;font-size:11.8px;color:var(--muted);max-width:320px;line-height:1.6}
+.pos-b{font-weight:800;font-size:10.5px;border-radius:6px;padding:2px 8px;color:#fff;display:inline-block}
+.pos-GK{background:#7C3AED}.pos-DEF{background:#2563EB}.pos-MID{background:#15803D}.pos-FWD{background:#DC2626}
+.tag{font-size:9.5px;font-weight:800;border-radius:5px;padding:1px 6px;display:inline-block;margin-inline-start:4px;vertical-align:middle}
+.tag.new{background:#DCFCE7;color:#15803D}
+.tag.cap{background:#C99A3B;color:#0F172A}
+.tag.pen{background:#EDE9FE;color:#7C3AED}
+.note{background:#F8FAFC;border:1px solid var(--line);border-inline-start:4px solid var(--gold);border-radius:8px;padding:12px 14px;font-size:12.5px;line-height:1.8;margin-top:12px}
+.note.red{border-inline-start-color:var(--bad)}
+.count-pill{background:#F1F5F9;border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:11.5px;font-weight:700;color:var(--muted)}
+.wgt{display:flex;border-radius:999px;overflow:hidden;height:30px;font-size:10.5px;font-weight:800;color:#fff;margin:10px 0}
+.wgt span{display:flex;align-items:center;justify-content:center;text-align:center}
+.pitch{background:linear-gradient(180deg,#166534,#15803D 40%,#166534);border-radius:12px;padding:26px 14px;position:relative;border:1px solid var(--line)}
+.pitch::before{content:"";position:absolute;inset:14px;border:2px solid rgba(255,255,255,.28);border-radius:8px;pointer-events:none}
+.row-line{display:flex;justify-content:center;gap:14px;margin:14px 0;flex-wrap:wrap;position:relative;z-index:2}
+.pcard{background:rgba(255,255,255,.97);border-radius:10px;padding:8px 10px;min-width:130px;text-align:center;border-bottom:3px solid #1E293B;box-shadow:0 3px 10px rgba(0,0,0,.25)}
+.pcard.cap{border-bottom-color:var(--gold);outline:2px solid var(--gold)}
+.pcard.newin{outline:2px dashed #15803D}
+.pcard .nm{font-weight:800;font-size:13px}
+.pcard .cl{color:var(--muted);font-size:10.5px}
+.pcard .sc{font-weight:800;font-size:15px;color:#0F172A}
+.capbadge{background:var(--gold);color:#0F172A;font-size:9.5px;font-weight:800;border-radius:999px;padding:1px 8px;display:inline-block;margin-bottom:2px}
+.slot{min-width:170px;text-align:start;padding:8px 10px}
+.slot .slot-h{font-size:9.5px;font-weight:800;color:var(--muted);letter-spacing:.4px;border-bottom:1px dashed var(--line);padding-bottom:3px;margin-bottom:4px;display:flex;justify-content:space-between}
+.slot .slot-h .k{color:#94A3B8;font-weight:700}
+.prow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:2px 0}
+.prow .nm2{font-weight:800;font-size:12.5px}
+.prow.alt .nm2{font-weight:600;font-size:11.5px;color:var(--muted)}
+.prow .scs{font-size:11.5px;font-weight:700;color:#334155;white-space:nowrap}
+.prow .scs b{color:#0F172A;font-size:13px}
+.prow.alt .scs{color:var(--muted)}
+.prow .scs .g3s{color:var(--gold);background:#0F172A;border-radius:5px;padding:0 5px;margin-inline-start:3px}
+.prow.alt .scs .g3s{background:#F1F5F9;color:#64748B}
+.newbadge{background:#DCFCE7;color:#15803D;font-size:9.5px;font-weight:800;border-radius:999px;padding:1px 8px;display:inline-block;margin-bottom:2px}
+.bench{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:14px;padding:12px;background:#F8FAFC;border:1px dashed var(--line);border-radius:10px}
+.vfm-row{display:flex;align-items:center;gap:10px;margin:8px 0}
+.vfm-row .lab{width:170px;font-size:12px;font-weight:700}
+.vfm-row .track{flex:1;height:22px;background:#F1F5F9;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.vfm-row .fill{height:100%;display:flex;align-items:center;padding:0 8px;color:#fff;font-size:11px;font-weight:800;white-space:nowrap}
+.changelog{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.changelog .head{background:#F8FAFC;padding:10px 14px;font-weight:800;font-size:13px;border-bottom:1px solid var(--line)}
+.changelog ul{list-style:none;padding:12px 16px}
+.changelog li{padding:5px 0;font-size:12.5px;line-height:1.7;border-bottom:1px dashed var(--line)}
+.changelog li:last-child{border-bottom:0}
+.fdrgrid{border-collapse:collapse;width:100%;min-width:860px}
+.fdrgrid th{position:sticky;top:0}
+.fdrgrid td{padding:8px 6px;text-align:center;font-weight:800;font-size:11.5px;border:2px solid #fff;border-radius:6px}
+.fdrgrid td.team{background:#0F172A;color:#fff;text-align:start;white-space:nowrap;font-size:12px;border-radius:0}
+.f1{background:#4ADE80;color:#0F172A}
+.f2{background:#166534;color:#fff}
+.f3{background:#E2E8F0;color:#1E293B}
+.f4{background:#F87171;color:#fff}
+.f5{background:#7F1D1D;color:#fff}
+.fq{background:repeating-linear-gradient(135deg,#F4E9CE 0 6px,#FDF6E3 6px 12px);color:#A16207}
+.fl{background:#F1F5F9;color:#94A3B8;font-weight:600}
+.foot{color:var(--muted);font-size:11px;text-align:center;padding:18px}
+@media(max-width:640px){.dash{margin:12px;padding:14px}.pcard{min-width:102px}.vfm-row .lab{width:110px}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-row">
+    <h1>غرفة عمليات الفانتزي 2026/27</h1>
+    <span class="vpill">v4.0 الموحدة · تحديث كل خميس</span>
+  </div>
+  <div class="nav" id="nav">
+    <button class="on" data-t="home" onclick="go(this)">🏠 الرئيسية</button>
+    <button data-t="squad" onclick="go(this)">⚽ التشكيلة</button>
+    <button data-t="fx" onclick="go(this)">📅 الجداول والفرق</button>
+    <button data-t="db" onclick="go(this)">📊 قاعدة البيانات</button>
+    <button data-t="exp" onclick="go(this)">🔍 المستكشف</button>
+    <button data-t="risk" onclick="go(this)">⚠️ المخاطر والمدربون</button>
+    <button data-t="cal" onclick="go(this)">📆 الفيكشر</button>
+    <button data-t="inj" onclick="go(this)">🏥 الإصابات والتحذيرات</button>
+  </div>
+</div>
+
+<!-- ================================================= HOME ================================================= -->
+<section class="view on" id="v-home">
+<div class="dash">
+  <div class="sec-title">لوحة الموسم — التواريخ الحاكمة</div>
+  <div class="grid g4">
+    <div class="card gold"><h3>نهائي كأس العالم</h3><div class="big">19 يوليو</div><p>الأرجنتين × إسبانيا — نيويورك/نيوجيرسي. نتيجته تعدّل أرقام إنزو وسينيسي ورايا في قاعدة البيانات.</p></div>
+    <div class="card blue"><h3>نافذة البري سيزون</h3><div class="big">18 يوليو → 16 أغسطس</div><p>بدأت اليوم فعليًا (يونايتد × ريكسهام). ركيزة قيد التتبع تمتلئ أسبوعيًا.</p></div>
+    <div class="card warn"><h3>الدرع الخيرية</h3><div class="big">16 أغسطس</div><p>أرسنال × مان سيتي — كارديف. نقطة الإقفال النهائية لركيزة البري سيزون قبل GW1 بخمسة أيام.</p></div>
+    <div class="card good"><h3>انطلاق الدوري GW1</h3><div class="big">21 أغسطس</div><p>أرسنال × كوفنتري تفتتح الموسم. النافذة تغلق 1 سبتمبر — بعد جولتين!</p></div>
+  </div>
+
+  <div class="sec-title" style="margin-top:20px">منهجية النموذج الخماسي</div>
+  <div class="wgt">
+    <span style="width:40%;background:#1E293B">40% موسم 25/26 + الزخم (آخر 10 ×2)</span>
+    <span style="width:20%;background:#C99A3B;color:#0F172A">20% كأس العالم</span>
+    <span style="width:15%;background:#2563EB">15% جدول أول 6–8</span>
+    <span style="width:15%;background:#64748B">15% بري سيزون</span>
+    <span style="width:10%;background:#7C3AED">10% السياق</span>
+  </div>
+  <div class="note">جوهر النموذج: <b>معامل الزخم</b> — آخر 10 جولات من 25/26 تُوزن ×2 وأول 10 جولات ×0.7، فمن أنهى الموسم صاعدًا (هالاند: 5 أهداف بآخر 5 · كيليهر: أفضل حارس منذ يناير) يتقدم على من بدأه متوهجًا وخفت. ركيزة البري سيزون (15%) موزعة مؤقتًا على الركيزتين الأولى والثالثة وتُفعَّل وديةً وديةً حتى إقفال الدرع الخيرية.</div>
+
+  <div class="sec-title" style="margin-top:20px">لوحة القرارات المعلقة — كل ما ينتظر حسمًا في مكان واحد</div>
+  <div class="twrap">
+  <table style="min-width:820px">
+    <thead><tr><th>#</th><th>القرار</th><th>محكّه</th><th>موعد الحسم</th><th>الخيار الافتراضي إن غابت البيانات</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td class="pname">تيمبر 🏥 <span class="chip good">حُسم مبدئيًا v5.1</span></td><td class="fx">توثيق غيابه آخر شهرين (ركبة منذ مارس) حسم القرار قبل الوديات</td><td>تم — قابل للنقض بجيرونا</td><td class="fx">✅ غيهي أساسيًا الآن؛ تيمبر يعود فقط بمشاركة كاملة موثقة</td></tr>
+      <tr><td>2</td><td class="pname">خاكبو أم سوبوسلاي</td><td class="fx">أدوارهما في وديتي ليفربول (25/7 و…)</td><td>خميس 30/7</td><td class="fx">سوبوسلاي (أدلة أقوى + أرخص 1.0م)</td></tr>
+      <tr><td>3</td><td class="pname">إغلاق فجوة الميزانية (−5.1م)</td><td class="fx">الأسعار الرسمية عند إطلاق FPL</td><td>أول خميس بعد الإطلاق</td><td class="fx">مسار v4.7: دكة قابلة للعب + بند 2</td></tr>
+      <tr><td>4</td><td class="pname">مهاجم توتنهام وحارسه</td><td class="fx">وديات أستراليا (سولانكي/ريتشارليسون · فيكاريو/دوبرافكا)</td><td>خميس 30/7</td><td class="fx">إبقاء توتنهام دكةً فقط</td></tr>
+      <tr><td>5</td><td class="pname">وجهة صلاح وبووين</td><td class="fx">إعلانات رسمية قبل 1/9</td><td>فور الإعلان</td><td class="fx">خارج الحسابات حتى التوقيع</td></tr>
+      <tr><td>6</td><td class="pname">تحويل واتكينز 🎯</td><td class="fx">دقائقه بعد العودة + قرعة أبطال فيلا</td><td>GW3–4</td><td class="fx">التحويل الأول من الوايلد كارد أو المجاني</td></tr>
+      <tr><td>7</td><td class="pname">جناح نيوكاسل الجديد</td><td class="fx">صفقة تعويض غوردون (بارنز مرشح داخلي)</td><td>حتى 1/9</td><td class="fx">لا استثمار بهجومهم قبل الوضوح</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="sec-title" style="margin-top:20px">استراتيجية الأوراق — الإطار الأولي</div>
+  <div class="grid g4">
+    <div class="card gold"><h3>🃏 الوايلد كارد الأول</h3><p>نافذتان مرشحتان: <b>(أ) GW3–4</b> فور إغلاق الانتقالات (1 سبتمبر) لالتقاط صفقات الديدلاين وعودة مرهقي المونديال (واتكينز، غيهي، إنزو) — الأرجح لتشكيلتنا لأن هدف تحويل واتكينز معلن أصلًا · <b>(ب) التوقف الدولي المدمج بين GW5–6</b>. قيد موثق: توقف سبتمبر أُجّل ودُمج في فترة واحدة أكبر بين الجولتين 5 و6 — الاستراتيجية التقليدية (FH مبكر + WC بالتوقف الأول) لم تعد صالحة كما كانت.</p></div>
+    <div class="card blue"><h3>🎯 التريبل كابتن</h3><p>الإغراء المبكر: هالاند × كوفنتري (GW5) بأرضه. الانضباط: الاحتفاظ به لأول جولة مزدوجة (DGW) يظل أعلى قيمة متوقعة تاريخيًا — القرار النهائي بعد صدور تواريخ كؤوس يناير–فبراير. لا تحرقه قبل GW5 مهما أغرت الافتتاحية.</p></div>
+    <div class="card purple"><h3>🪑 البنش بوست</h3><p>مؤجل للجولات المزدوجة بمنتصف الموسم — ويشترط أولًا إصلاح «الدكة الميتة» (بند الميزانية v4.7): لا معنى لمضاعفة دكة نصفها لا يلعب. يُفعَّل فقط حين يكون البدلاء الأربعة أساسيين مضمونين بجولة مزدوجة.</p></div>
+    <div class="card warn"><h3>🆓 الفري هيت + موعد GW1</h3><p>الفري هيت يُدّخر للجولات الفارغة (BGW) حول كؤوس الربيع. ⏰ <b>بند توثيق معلق:</b> الافتتاح جمعة 21 أغسطس (أرسنال×كوفنتري) بينما مصدر ذكر «ديدلاين السبت 22» — التقدير المنطقي: الإغلاق الجمعة ~18:45 بتوقيت السعودية+، ويُوثق نهائيًا في تحديث الخميس.</p></div>
+  </div>
+  <div class="sec-title" style="margin-top:20px">سجل الإصدارات ومحطات الخميس</div>
+  <div class="changelog">
+    <div class="head">🗓️ v5.1 — 18 يوليو · التحديثات: كل خميس 9:00 مساءً حتى نهاية الموسم (مايو 2027)</div>
+    <ul>
+      <li><b>v5.1 (تشكيلات الموسم الرسمية + قرار تيمبر):</b> 🔴 توثيق صادم: تيمبر غاب عن آخر شهرين بإصابة ركبة منذ مارس (زخم آخر 10 = صفر) — <b>قرار مبدئي: غيهي أساسيًا</b> وتيمبر 85←74، وفجوة الميزانية انكمشت لـ0.8م · أرقام رسمية: أندرسون 180 نقطة و31.6/مليون · غيبس-وايت 124 نقطة من GW20–38 (الثاني خلف برونو!) · مساهمات فان دايك السبع كلها متأخرة · برونو 7.6 نقطة/مباراة تحت كاريك · أوريلي لاعب الموسم الشاب 🏆 · ترقية بورو وروميرو وريتشارليسون وبوتمان بترشيحات الجولة الأخيرة الرسمية وعمق مشوار النهائي · أرسنال بلغ نهائي الأبطال ضد باريس (النتيجة تُوثق الخميس).</li><li><b>v5.0 (الجدول الرسمي الكامل 🏆):</b> سحبنا صفحة الرابطة الرسمية بكل الـ380 مباراة — الشبكة صارت موثقة 100% بلا قفل ولا علامة استفهام · تصحيحان مهمان كشفهما المصدر: هالاند×كوفنتري في GW3 لا GW5 (أوضح شارة بالجولات الست)، وخصم أرسنال بالجولة 4 سندرلاند خارجًا لا داخلًا · شارة GW4 الجديدة: ليفربول×فولهام بأنفيلد · الجولة 2 اكتملت تفصيلًا (فيلا×أرسنال ليلة إغلاق النافذة!) · قمة أنفيلد ليفربول×سيتي موثقة 10 أكتوبر.</li><li><b>v4.13:</b> 📆 الفيكشر: اعتماد H/A بدل د/خ في الشبكة وكل الجداول · 🧢 جدول ترشيحَي القيادة لكل جولة (GW1–6) متغذيًا على الشبكة مباشرة — بمنطق وتحذير لكل جولة، ويمتد مع الشبكة حتى GW38.</li><li><b>v4.12 (مراجعة التبويبات):</b> 🏠 لوحة القرارات المعلقة السبعة (محك + موعد حسم + خيار افتراضي لكل قرار) · ⚽ تمييز «المرشحين» عن دكة الـ15 الفعلية · 🔍 إضافة أقوى تفاضليَّين غائبَين للمستكشف: غيبس-وايت وإسماعيلا سار · ⚠️ بطاقة إيمري/فيلا (قيد الأبطال الجديد) · 📊 فرز قائمة الأندية أبجديًا.</li><li><b>v4.11:</b> 📆 شبكة FDR الملونة بأسلوب صورة أحمد (فرق × GW1–6 بخلايا ملونة) — مبنية على مباريات 26/27 الموثقة لا شبكة 25/26 التي بالصورة · الخلايا: 34 مثبتة + 12 مرجحة (؟) + الباقي 🔒 يُملأ من الجدول الرسمي كل خميس حتى اكتمال الأعمدة الستة ثم تمتد لكل الموسم.</li><li><b>v4.10 (صيد الثغرات):</b> فحص تقني كامل (توازن الوسوم + سلامة الكود ✓) · 🔴 إصلاح تناقض: البرازيل خرجت بثمن النهائي موثقًا بينما وُصف مشوار غابرييل بالعميق — صُحّح لصالحه (راحة أبكر) · 🧹 12 ادعاءً غير موثق أعيدت صياغته بأمانة (تأهل سلوفينيا/أيرلندا/إيطاليا، نتائج اسكتلندا وأمريكا وباراغواي ونيوزيلندا...) — الثابت يُذكر والمجهول يُعلن مجهولًا · توثيق مصدر رقم تاركوفسكي (محاكاة 24/25) · تحويط خصم أرسنال بالجولة 4.</li><li><b>v4.9:</b> ⚽ التشكيلة: ثلاثة مرشحين لكل خانة (33 خيارًا) بإضافة صف ثالث موزون — أبرزهم يوكيريس⚡ المحبوس بحصة أرسنال وواتكينز🎯 هدف GW4 · 📆 تبويب الفيكشر الجديد: الجولة 1 كاملة موثقة بالتوقيتين + الموثق من الجولة 2 + جولتا نوفمبر الكاملتان (ليفربول×يونايتد، أرسنال×سيتي) + توثيق الديدلاين الرسمي: السبت 22/8 الساعة 11:30 بريطانيا.</li><li><b>v4.8 (تنفيذ توصيات التدقيق):</b> 🧮 كشف الحساب الشفاف: المعادلة الكاملة والأرقام الفرعية الخمسة لكل أساسي — كل سكور صار قابلًا للطعن خليةً خلية · 🃏 قسم استراتيجية الأوراق (وايلد كارد GW3–4 مرجحًا، تريبل كابتن محفوظ للمزدوجة، قيد التوقف المدمج GW5–6 الموثق) · 🧹 نظافة البيانات: فصل الصفوف المدمجة (كولويل/تشالوباه، بوتمان/بيرن) وتوحيد فئة «بلا نادٍ» وتمييز ملفات الأندية عن اللاعبين.</li><li><b>v4.7 (تدقيق خارجي ذاتي):</b> 🔴 تصحيح خطأ حسابي: الميزانية الفعلية 105.1م لا 100.1م + مسار نزول موثق للسقف · 🔴 تصحيح بياني: خاكبو أقل من 10 أهداف (غيابه عن قائمة العشرة الموثقة) وسوبوسلاي ينافسه بالأدلة · اكتشاف عيب الدكة الميتة بالجولة 1 (سينيسي + أندرسون غائبان افتتاحيًا) مع إصلاح مقترح.</li><li><b>v4.6 (اكتمال الصناعة والمونديال + إعادة تقييم):</b> صنّاع الدوري كاملين: برونو 21 (و136 فرصة) · شرقي 12 من 19 بداية · هالاند 8 (تصحيح كبير من 3!) · رباعي الـ7: سوبوسلاي وصلاح وويلسون <b>وغارنر الذي نال قميص إنجلترا</b> · بووين 9+11 · أرقام المونديال النهائية قبل نهائي الغد: مبابي 8+3 وميسي 8+1 وهالاند 7 (بثنائية بمرمى البرازيل) وكين وبيلينغهام 6 و<b>إسماعيلا سار (بالاس) 4</b> وتروسار 2 · إنجلترا سقطت بنصف النهائي أمام الأرجنتين 3-2 · حكم الواتكينز/شيشكو وُثّق بقرار معلن + كتلة «إعادة تقييم التشكيلة» الجديدة بتبويب التشكيلة.</li><li><b>v4.5 (حقن الأرقام الموثقة):</b> قائمة الهدافين 25/26 كاملة حُقنت (سيمينيو 17، واتكينز 16، جواو بيدرو وغيبس-وايت 15، شيشكو ومبومو وإيكيتيكيه وريتشارليسون 11...) · خريطة البلنتيات الرسمية (ثياغو 8 — ترقّى لـ«مؤكد») · كاسيميرو 9 أهداف منها 8 رأسيات! · سوبوسلاي 4 أهداف كلها ركلات حرة · 🔥 اكتشافان: يوكيريس (أرسنال) 14 هدفًا بزخم صاروخي منذ ديسمبر، وواتكينز 8 بآخر 8 مع تتويج فيلا بالدوري الأوروبي وتأهلها للأبطال (ضغط جدول جديد على روجرز/واتكينز).</li><li><b>v4.4:</b> 📊 توسعة كبرى: 74←156 لاعبًا بعمق تشكيلات حقيقي لكل نادٍ (بورو، فودن، أوديغارد، كايسيدو، برونو غيماريش، ماتيتا...) · 🔧 تصحيح: لو فيه لاعب سندرلاند لا برينتفورد (هو صاحب البانينكا التي صدها كيليهر — أي كان خصمه) · صفوف الصاعدين الثلاثة فُصلت لملفات مستقلة.</li><li><b>v4.3:</b> 📊 قاعدة البيانات وُسّعت من 24 إلى 74 لاعبًا تغطي الأندية العشرين كلها + فلتر أندية جديد · التشكيلة: أسعار اللاعبين داخل كل خانة.</li><li><b>v4.2:</b> ⚽ التشكيلة أصبحت بنظام «لاعبَين لكل خانة» (أساسي + بديل جاهز) مع سكورين لكل لاعب: العام + <b>سكور أول 3 جولات</b> المبني على الجدول الفعلي — برونو 96 وشيشكو 90 (افتتاحية يونايتد الذهبية)، تيمبر 60 (شكوك الإصابة)، إنزو 58 (إرهاق النهائي).</li>
+      <li><b>v4.1:</b> 🏥 تبويب الإصابات والتحذيرات الجديد · 🔴 تصحيح جوهري: تيمبر غاب عن المونديال كاملًا بإصابة أربية (وليس «مرتاحًا» كما ورد خطأً) — شكوك 50% وخطة طوارئ جاهزة (غيهي/تاركوفسكي) تُحسم بعد ودية جيرونا · رودري يغيب عن الأسابيع الافتتاحية = دقائق أندرسون ترتفع (76←79) · أوغارتي أشهرًا (أربطة الركبة) · التذكير الأسبوعي عُدّل إلى 9 مساءً وامتد لنهاية الموسم.</li>
+      <li><b>v4.0:</b> دمج التشكيلة والجداول وقاعدة البيانات والمستكشف والمخاطر في ملف واحد بتبويبات — لا مزيد من الملفات المتناثرة.</li>
+      <li><b>v3.0 (تدقيق الخبير):</b> 🔴 اكتشاف مخالفة قانون الـ3 لاعبين — كانت التشكيلة تضم 4 من أرسنال: خرج رايس ودخل غارنر (5.0) ← الميزانية ≈100.1م ✓ · ▲ ثياغو 79←83 بعد توثيقه وصيفًا للهدافين (22 هدفًا) · فصل صريح بين الموثق والمقدَّر (≈) في كل الأرقام.</li>
+      <li><b>v2.0:</b> 🔴 وست هام هبط ← خرج بووين ودخل شيشكو · 🆕 ركيزة الجداول الافتتاحية + أقسام الهابطين/الصاعدين ومخاطرة نافذة 1 سبتمبر · ضبط تذكير الخميس 9 صباحًا.</li>
+      <li><b>v1.0:</b> النموذج الأساسي بأربع ركائز والتشكيلة الأولى.</li>
+    </ul>
+  </div>
+  <div class="note">📅 <b>أجندة الخميس القادم (23 يوليو):</b> ١) نتيجة النهائي وأثرها على الأرجنتينيين والإسبان · ٢) قراءة أولى: فيلا×والسول (21/7) ودقائق روجرز · ٣) أي مستجد بملفَّي صلاح ووجهة بووين · ٤) بدء ملء عمود البري سيزون في قاعدة البيانات.</div>
+</div>
+</section>
+
+<!-- ================================================= SQUAD ================================================= -->
+<section class="view" id="v-squad">
+<div class="dash">
+  <div class="sec-title">التشكيلة v4.9 — ثلاثة مرشحين لكل خانة</div>
+  <div class="sec-sub">كل خانة: <b>الأساسي</b> (سطر غامق) + <b>بديلان جاهزان</b> (سطران رماديان بترتيب الأفضلية) · الرقم الأول = السكور العام · الرقم داخل الإطار الذهبي = <b>سكور أول 3 جولات</b> (GW1–3: 21 أغسطس – أوائل سبتمبر) المبني على الجدول الفعلي لكل نادٍ</div>
+  <div class="pitch">
+    <div class="row-line">
+      <div class="pcard slot"><div class="slot-h"><span>حراسة المرمى</span><span class="k">عام · أول 3</span></div>
+        <div class="prow"><span class="nm2">رايا · 5.8</span><span class="scs"><b>88</b><span class="g3s">84</span></span></div>
+        <div class="prow alt"><span class="nm2">كيليهر · 5.0</span><span class="scs">84<span class="g3s">75</span></span></div>
+        <div class="prow alt"><span class="nm2">د. هندرسون (بالاس) · 4.8</span><span class="scs">78<span class="g3s">70</span></span></div>
+      </div>
+    </div>
+    <div class="row-line">
+      <div class="pcard slot"><div class="slot-h"><span>قلب دفاع 1</span><span class="k">عام · أول 3</span></div>
+        <div class="prow"><span class="nm2">غابرييل · 7.0</span><span class="scs"><b>91</b><span class="g3s">86</span></span></div>
+        <div class="prow alt"><span class="nm2">تاركوفسكي · 5.4</span><span class="scs">87<span class="g3s">80</span></span></div>
+        <div class="prow alt"><span class="nm2">موريو (فورست) · 5.0</span><span class="scs">83<span class="g3s">72</span></span></div>
+      </div>
+      <div class="pcard slot newin"><div class="slot-h"><span>قلب دفاع 2 — قرار v5.1 ✅</span><span class="k">عام · أول 3</span></div>
+        <div class="prow"><span class="nm2">غيهي · 5.2</span><span class="scs"><b>85</b><span class="g3s">72</span></span></div>
+        <div class="prow alt"><span class="nm2">تيمبر ⚠️ · 6.5</span><span class="scs">74<span class="g3s">60</span></span></div>
+        <div class="prow alt"><span class="nm2">فان هيكه (توتنهام) · 4.8</span><span class="scs">75<span class="g3s">70</span></span></div>
+      </div>
+      <div class="pcard slot"><div class="slot-h"><span>قلب دفاع 3</span><span class="k">عام · أول 3</span></div>
+        <div class="prow"><span class="nm2">فان دايك · 6.0</span><span class="scs"><b>79</b><span class="g3s">76</span></span></div>
+        <div class="prow alt"><span class="nm2">ي. أندرسن · 4.5</span><span class="scs">82<span class="g3s">73</span></span></div>
+        <div class="prow alt"><span class="nm2">فان دن بيرغ (برينتفورد) · 4.5</span><span class="scs">81<span class="g3s">72</span></span></div>
+      </div>
+    </div>
+    <div class="row-line">
+      <div class="pcard slot cap"><div class="slot-h"><span>وسط 1 — صانع بريميوم</span><span class="k">عام · أول 3</span></div>
+        <div class="prow"><span class="nm2">برونو 🧢 · 11.5</span><span class="scs"><b>94</b><span class="g3s">96</span></span></div>
+        <div class="prow alt"><span class="nm2">كاسيميرو · 5.0</span><span class="scs">78<span class="g3s">82</span></span></div>
+        <div class="prow alt"><span class="nm2">غيبس-وايت (فورست) · 7.5</span><span class="scs">85<span class="g3s">78</span></span></div>
+      </div>
+      <div class="pcard slot"><div class="slot-h"><span>وسط 2 — جناح ليفربول</span><span class="k">عام · أول 3</span></div>
+        <div class="prow"><span class="nm2">خاكبو · 7.5</span><span class="scs"><b>85</b><span class="g3s">80</span></span></div>
+        <div class="prow alt"><span class="nm2">سوبوسلاي · 6.5</span><span class="scs">81<span class="g3s">78</span></span></div>
+        <div class="prow alt"><span class="nm2">مونيوز (ليفربول) · 5.5</span><span class="scs">77<span class="g3s">68</span></span></div>
+      </div>
+      <div class="pcard slot"><div class="slot-h"><span>وسط 3 — هجومي متوسط</span><span class="k">عام · أول 3</span></div>
+        <div class="prow"><span class="nm2">روجرز · 7.0</span><span class="scs"><b>83</b><span class="g3s">76</span></span></div>
+        <div class="prow alt"><span class="nm2">إنزو · 6.5</span><span class="scs">76<span class="g3s">58</span></span></div>
+        <div class="prow alt"><span class="nm2">هـ. ويلسون (فولهام) · 5.5</span><span class="scs">78<span class="g3s">74</span></span></div>
+      </div>
+      <div class="pcard slot"><div class="slot-h"><span>وسط 4 — ممكّن DEFCON</span><span class="k">عام · أول 3</span></div>
+        <div class="prow"><span class="nm2">غارنر · 5.0</span><span class="scs"><b>80</b><span class="g3s">78</span></span></div>
+        <div class="prow alt"><span class="nm2">فيفر · 4.9</span><span class="scs">79<span class="g3s">70</span></span></div>
+        <div class="prow alt"><span class="nm2">جاكا (سندرلاند) · 5.5</span><span class="scs">74<span class="g3s">70</span></span></div>
+      </div>
+    </div>
+    <div class="row-line">
+      <div class="pcard slot cap"><div class="slot-h"><span>هجوم 1 — البريميوم C</span><span class="k">عام · أول 3</span></div>
+        <div class="prow"><span class="nm2">هالاند 🧢C · 14.0</span><span class="scs"><b>93</b><span class="g3s">95</span></span></div>
+        <div class="prow alt"><span class="nm2">جواو بيدرو · 7.5</span><span class="scs">77<span class="g3s">70</span></span></div>
+        <div class="prow alt"><span class="nm2">يوكيريس (أرسنال)⚡ · 9.0</span><span class="scs">86<span class="g3s">78</span></span></div>
+      </div>
+      <div class="pcard slot"><div class="slot-h"><span>هجوم 2 — رهان الجدول</span><span class="k">عام · أول 3</span></div>
+        <div class="prow"><span class="nm2">شيشكو · 7.5</span><span class="scs"><b>84</b><span class="g3s">90</span></span></div>
+        <div class="prow alt"><span class="nm2">ويلسون (حر) · 5.5</span><span class="scs">70<span class="g3s">—</span></span></div>
+        <div class="prow alt"><span class="nm2">واتكينز (فيلا)🎯 · 8.0</span><span class="scs">88<span class="g3s">74</span></span></div>
+      </div>
+      <div class="pcard slot"><div class="slot-h"><span>هجوم 3 — استثناء الكفاءة</span><span class="k">عام · أول 3</span></div>
+        <div class="prow"><span class="nm2">ثياغو · 7.0</span><span class="scs"><b>83</b><span class="g3s">76</span></span></div>
+        <div class="prow alt"><span class="nm2">سولانكي 🏥 · 7.0</span><span class="scs">74<span class="g3s">66</span></span></div>
+        <div class="prow alt"><span class="nm2">كالفرت-لوين (ليدز) · 6.0</span><span class="scs">76<span class="g3s">70</span></span></div>
+      </div>
+    </div>
+  </div>
+  <div class="note">🪑 <b>تمييز مهم:</b> الصفوف الرمادية داخل الخانات أعلاه = «مرشحون» للمقارنة والاستبدال، أما الأربعة أدناه فهم <b>دكة الفريق الفعلية (المقاعد 12–15 من الـ15 المسجلين)</b> — وهم موضوع إصلاح «الدكة الميتة» في مسار الميزانية.</div>
+  <div class="bench">
+    <div class="pcard"><div class="nm">كيليهر</div><div class="cl">برينتفورد · GK · 5.0</div><div class="sc">84</div></div>
+    <div class="pcard"><div class="nm">فان هيكه</div><div class="cl">توتنهام · DEF · 4.8</div><div class="sc">75</div></div>
+    <div class="pcard"><div class="nm">سينيسي</div><div class="cl">توتنهام · DEF · 4.5</div><div class="sc">66</div></div>
+    <div class="pcard"><div class="nm">أندرسون</div><div class="cl">مان سيتي · MID · 6.0</div><div class="sc">79 ▲</div></div>
+  </div>
+
+  <div class="note">💡 <b>مرشحان ثالثان يحملان رمزًا:</b> يوكيريس⚡ سكوره العام أعلى من أساسيَي خانته لكن حصة أرسنال الممتلئة تحبسه (يتحرر فقط بخروج تيمبر) · واتكينز🎯 أعلى الثلاثة عامًا (88) لكنه هدف GW4 المعلن لا خيار الانطلاقة (إرهاق نصف النهائي + أبطال فيلا). </div><div class="note">🎯 <b>منطق سكور أول 3 جولات (لماذا يختلف عن العام):</b> برونو 96 وشيشكو 90 لأن يونايتد يفتتح بهال وإيبسويتش (أسهل ثنائية بالدوري) · هالاند 95 (بورنموث بأرضه ثم بالاس) · تيمبر ينهار من 85 إلى 60 بسبب شكوك الإصابة لا الجدول · إنزو 58 لأن نهائي الغد يعني بداية متدرجة رغم جدول تشيلسي · غيهي 72 لأن بالاس يبدأ خارجًا ضد إيفرتون مع مدرب جديد. <b>القاعدة العملية:</b> شكّل GW1 من أصحاب الإطار الذهبي ≥75، وأصحاب العام المرتفع/أول-3 المنخفض (إنزو، غيهي) هم أهداف تحويلات الجولة 3–4 بعد انقشاع الغبار.</div>
+    <div class="sec-title" style="margin-top:20px">كشف الحساب الشفاف — كيف تولّد السكورات فعليًا</div>
+  <div class="sec-sub">المعادلة: الأساس = (موسم×0.40 + مونديال×0.20 + جدول×0.15 + سياق×0.10) ÷ 0.85 (القسمة لإعادة توزيع وزن البري سيزون المعلّق 15% حتى تكتمل الوديات) · ثم تعديل الأدوار ±5 (بلنتيات/ركنيات/مسارات نقاط موثقة) = السكور النهائي المعروض بالخانات</div>
+  <div class="twrap">
+  <table style="min-width:940px">
+    <thead><tr><th>اللاعب</th><th>موسم+زخم (40%)</th><th>مونديال (20%)</th><th>جدول أول 6–8 (15%)</th><th>سياق (10%)</th><th>الأساس ÷0.85</th><th>تعديل الأدوار</th><th>النهائي</th></tr></thead>
+    <tbody>
+      <tr><td class="pname">هالاند</td><td>96</td><td>97</td><td>94</td><td>82</td><td>94.2</td><td>−1 عبء ما بعد بيب</td><td><b>93</b></td></tr>
+      <tr><td class="pname">برونو</td><td>97</td><td>70</td><td>99</td><td>96</td><td>90.9</td><td>+3 بلنتيات + ركنيات (4 بلنتيات و136 فرصة موثقة)</td><td><b>94</b></td></tr>
+      <tr><td class="pname">غابرييل</td><td>95</td><td>72</td><td>90</td><td>95</td><td>88.7</td><td>+2 تهديد ركنيات + قيادة تميّز GW4</td><td><b>91</b></td></tr>
+      <tr><td class="pname">رايا</td><td>90</td><td>78</td><td>90</td><td>92</td><td>87.4</td><td>+1 قفاز ذهبي خلف أقوى دفاع</td><td><b>88</b></td></tr>
+      <tr><td class="pname">خاكبو ⚠️</td><td>80</td><td>88</td><td>82</td><td>85</td><td>82.8</td><td>+2 وريث عبء صلاح</td><td><b>85</b> (قيد مراجعة ضد سوبوسلاي)</td></tr>
+      <tr><td class="pname">غيهي ✅ (بديل تيمبر)</td><td>86</td><td>78 نصف نهائي</td><td>72</td><td>84</td><td>81.4</td><td>+3 وحدة بالاس الأفضل سعريًا + توفير 1.3م</td><td><b>85</b></td></tr>
+      <tr style="opacity:.55"><td class="pname">تيمبر (مُنزَل)</td><td>78 غاب آخر شهرين</td><td>40 غياب كامل</td><td>90</td><td>80</td><td>72.4</td><td>+2</td><td><b>74</b> — يستعيد مكانه بمشاركة جيرونا كاملة فقط</td></tr>
+      <tr><td class="pname">شيشكو</td><td>78</td><td>80 راحة كاملة</td><td>97</td><td>88</td><td>83.0</td><td>+1 مهاجم كاريك الأول</td><td><b>84</b></td></tr>
+      <tr><td class="pname">روجرز</td><td>88</td><td>85 راحة كاملة</td><td>76</td><td>78</td><td>84.0</td><td>−1 دوران أبطال محتمل</td><td><b>83</b></td></tr>
+      <tr><td class="pname">ثياغو</td><td>89</td><td>75</td><td>74</td><td>80</td><td>82.0</td><td>+1 ثمان بلنتيات موثقة</td><td><b>83</b></td></tr>
+      <tr><td class="pname">غارنر</td><td>82</td><td>60</td><td>85</td><td>88</td><td>78.1</td><td>+2 سابع صنّاع الدوري + قميص إنجلترا</td><td><b>80</b></td></tr>
+      <tr><td class="pname">فان دايك</td><td>88</td><td>68</td><td>80</td><td>58</td><td>78.4</td><td>+1 كل دقيقة + 5 رأسيات</td><td><b>79</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note">🔍 هذا الكشف يجعل كل سكور قابلًا للطعن رقمًا رقمًا: اعترض على أي خلية وسأعيد الحساب أمامك. عند اكتمال البري سيزون يعود الوزن 15% لمكانه (تُلغى القسمة على 0.85) وتُملأ خانة خامسة لكل لاعب — أول تحديث محسوب: خميس 6 أغسطس بعد وديات الأسبوعين الأولين.</div>
+<div class="note red">⚖️ <b>إعادة تقييم التشكيلة بعد اكتمال البيانات (v4.6) — أربعة أحكام:</b> ① <b>مبرَّرون بقوة أكبر:</b> هالاند (تبيّن أن له 8 صناعات و35 مساهمة — الوحيد بالقائمتين) · غارنر (تبيّن أنه خامس صنّاع الدوري بـ7 صناعات ونال قميص إنجلترا — لم يعد «ممكّن ميزانية» بل أساسي بجدارة) · ثياغو (8 بلنتيات + 7 أهداف حاسمة). ② <b>معضلة مفتوحة وموثقة:</b> واتكينز (16 هدفًا، 8 بآخر 8) ضد شيشكو (11 هدفًا): تفوق واتكينز رقميًا واضح، لكن شيشكو يحتفظ بالخانة لأول 3 جولات لثلاثة أسباب — جدول يونايتد الذهبي، راحته الكاملة مقابل عودة واتكينز المتأخرة من نصف نهائي إنجلترا، وضغط دوري الأبطال الجديد على فيلا. <b>واتكينز هدف التحويل الأول من GW4.</b> ③ <b>ضغط يوكيريس:</b> 14 هدفًا بزخم صاروخي لكنه محبوس خلف حصة أرسنال الممتلئة (رايا+غابرييل+تيمبر) — إن سقط تيمبر باختبار جيرونا تبقى خطة غيهي الدفاعية أولى من فتح الخانة ليوكيريس، لأن بلنتيات ثياغو الثماني أثمن من ترقية هجومية ثالثة. ④ <b>عيب هيكلي مكتشف بالتدقيق:</b> دكة الجولة الأولى شبه ميتة — سينيسي سيغيب افتتاحيًا وأندرسون عائد متأخرًا، أي أن بديلَين من أربعة غير قابلين للعب في GW1 (إصلاحه ضمن مسار الميزانية أعلاه). ⑤ <b>نقطة ضعف معلنة:</b> خاكبو (صُحّح لأقل من 10 أهداف) وروجرز ما زالا الأقل توثيقًا بين أساسيينا (أرقامهما الدقيقة ناقصة) — أول وديات ليفربول وفيلا (21–25 يوليو) هي محكمتهما، وقد يواجه روجرز خطر دوران الأبطال.</div>
+<div class="note">🧢 <b>خطة القيادة أول 6 جولات:</b> GW1 هالاند (بورنموث بأرضه) وبرونو الخيار الموازي (هال خارجًا) · GW2–3 هالاند (بالاس/كوفنتري) · GW4 <b>الديربي — ابتعد عن طرفيه كليًا:</b> الشارة لغابرييل (خصم أرسنال المتوقع سندرلاند — يُثبّت من الجدول الكامل) كخيار التميّز الآمن · GW5 هالاند (كوفنتري) · GW6 قمة سيتي×ليفربول — الشارة لبرونو (توتنهام بأرضه).</div>
+  <div class="note">⚖️ <b>تصحيح تدقيقي (v4.7):</b> الجمع الفعلي للأسعار التقديرية = <b>105.1م لا 100.1م</b> — رقم النسخ السابقة كان خطأ حسابيًا مني وأعتذر عنه. مسار النزول لسقف الـ100 (خصم 5.1م) بقرارين موثقين: ① دكة قابلة للعب: سينيسي (4.5، سيغيب افتتاحيًا) ← مرشح 4.0 من الوديات، وأندرسون (6.0، عودة متأخرة) ← ي. أندرسن (4.5) يوفران 2.0م ويصلحان عيب «الدكة الميتة بالجولة 1». ② خاكبو (7.5) ← سوبوسلاي (6.5) يوفر 1.0م بأدلة أقوى (انظر تصحيح خاكبو). المتبقي بعد ترقية غيهي (توفير 1.3م إضافية بقرار v5.1) ≈ 0.8م فقط — شبه مقفلة. توزيع الأندية يبقى قانونيًا في كل المسارات.</div>
+</div>
+</section>
+
+<!-- ================================================= FIXTURES ================================================= -->
+<section class="view" id="v-fx">
+<div class="dash">
+  <div class="sec-title">خريطة الدوري الجديدة</div>
+  <div class="grid g3">
+    <div class="card bad"><h3>⬇️ الهابطون: وولفز · بيرنلي · وست هام</h3>
+      <p>وست هام يهبط لأول مرة منذ 2012 بـ39 نقطة (أعلى رصيد لهابط منذ 2011). الأثر: بووين خارج الحسابات، ماتيوس فرنانديز بيع لتوتنهام بـ85م£ — راقب بقية التصفية حتى 1 سبتمبر.</p></div>
+    <div class="card good"><h3>⬆️ الصاعدون: كوفنتري · إيبسويتش · هال</h3>
+      <p>كوفنتري بطل التشامبيونشيب مع لامبارد (أول ظهور منذ 25 سنة)، إيبسويتش يعود فورًا مع أونيل، هال عبر الملحق. القاعدة: لاعب صاعد واحد كحد أقصى، من الدكة، بعد الوديات.</p></div>
+    <div class="card gold"><h3>🎯 سابقة سندرلاند</h3>
+      <p>25/26: رويفس وألديريتي (4.0م!) تصدرا أول 6 جولات — لكن الصيغة تشترط جدولًا رحيمًا، والصاعدون الثلاثة هذا الموسم رُميوا في العمق مباشرة وكوفنتري أصعبهم.</p></div>
+  </div>
+
+  <div class="sec-title" style="margin-top:20px">الجداول الافتتاحية — أول 6 جولات</div>
+  <div class="sec-sub">(H) داخل أرضه · (A) خارجها — ركيزة الـ15% في النموذج</div>
+  <div class="twrap">
+  <table style="min-width:900px">
+    <thead><tr><th>النادي</th><th>أول 6 جولات</th><th>التقييم</th><th>القرار الفانتزي</th></tr></thead>
+    <tbody>
+      <tr><td class="pname">مان يونايتد</td><td class="fx">HUL (A) · IPS (H) · EVE (A) · MCI (H) · FUL (A) · TOT (H) — تطابق رسمي كامل ✓</td><td><span class="chip good">الأسهل في الدوري</span></td><td class="fx">يتصدر مؤشر أول 8 — العقبة الوحيدة الديربي GW4. برونو شبه إجباري وشيشكو رهانه</td></tr>
+      <tr><td class="pname">مان سيتي</td><td class="fx">بورنموث (H) ثم بالاس وكوفنتري ضمن أول 5 · ليفربول GW6</td><td><span class="chip good">ممتازة أول 5</span></td><td class="fx">هالاند «البدّاء السريع» + جدول ذهبي = قيادة الجولات 1–5</td></tr>
+      <tr><td class="pname">أرسنال</td><td class="fx">COV (H) · AVL (A) · CHE (H) · SUN (A) · BHA (A) · LEE (H) — موثقة رسميًا</td><td><span class="chip good">جيدة → ممتازة حتى GW10</span></td><td class="fx">فريق واحد من الكبار في أول 8 — كتلة الدفاع الأرسنالية هي العمود الفقري</td></tr>
+      <tr><td class="pname">ليفربول</td><td class="fx">نيوكاسل (A) GW1 · أول 5 جيدة · سيتي GW6</td><td><span class="chip weak">جيدة بحذر</span></td><td class="fx">منصة بناء مثالية لإيراولا — تدعم خاكبو وفان دايك</td></tr>
+      <tr><td class="pname">نيوكاسل</td><td class="fx">ليفربول (H) · توتنهام · ثم انفراج هجومي واضح</td><td><span class="chip weak">صعبة ثم تتحسن</span></td><td class="fx">يتصدر مؤشر السهولة الهجومية لأول 6 — لكن بلا غوردون وتوناللي: انتظر صفقاتهم</td></tr>
+      <tr><td class="pname">بورنموث</td><td class="fx">MCI (A) · EVE (H) · NEW (A) · BRE (H) · LIV (H) · CHE (A) — موثقة رسميًا</td><td><span class="chip critical">الأصعب في الدوري</span></td><td class="fx">كل مبارياته 3+ في FDR — ممنوع الاقتراب حتى GW7 (يشمل تروفير)</td></tr>
+      <tr><td class="pname">الصاعدون</td><td class="fx">رُميوا في العمق مباشرة — لا بداية رحيمة</td><td><span class="chip risk">قاسية</span></td><td class="fx">كوفنتري الأصعب بينهم — لا استثمار مبكرًا</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+</section>
+
+<!-- ================================================= DATABASE ================================================= -->
+<section class="view" id="v-db">
+<div class="dash">
+  <div class="sec-title">قاعدة البيانات — 156 لاعبًا من الأندية العشرين × ثلاثة سياقات</div>
+  <div class="sec-sub">بدّل السياق من التبويبات · الفلاتر الذهبية تراكمية · اضغط رؤوس الأعمدة الرقمية للترتيب · ≈ تقدير نموذجي بانتظار Opta · «—» لا بيانات موثقة</div>
+  <div class="controls">
+    <span class="lbl">السياق:</span>
+    <span style="display:inline-flex">
+      <button class="vtab on" data-v="s" onclick="setView(this)">موسم 25/26</button>
+      <button class="vtab" data-v="w" onclick="setView(this)">كأس العالم</button>
+      <button class="vtab" data-v="p" onclick="setView(this)">البري سيزون</button>
+    </span>
+    <span class="lbl" style="margin-inline-start:8px">المركز:</span>
+    <button class="fbtn on" data-pos="ALL" onclick="setPos(this)">الكل</button>
+    <button class="fbtn" data-pos="GK" onclick="setPos(this)">حراس</button>
+    <button class="fbtn" data-pos="DEF" onclick="setPos(this)">دفاع</button>
+    <button class="fbtn" data-pos="MID" onclick="setPos(this)">وسط</button>
+    <button class="fbtn" data-pos="FWD" onclick="setPos(this)">هجوم</button>
+    <span class="lbl" style="margin-inline-start:8px">النادي:</span>
+    <select id="clubSel" onchange="renderDb()"><option value="ALL">كل الأندية</option></select>
+  </div>
+  <div class="controls">
+    <span class="lbl">فلاتر خاصة:</span>
+    <button class="fbtn gold" onclick="tg(this,'fNew')">🆕 الجدد هذا الصيف</button>
+    <button class="fbtn gold" onclick="tg(this,'fCap')">🧢 مرشحو القيادة</button>
+    <button class="fbtn gold" onclick="tg(this,'fPen')">⚽ منفذو البلنتيات</button>
+    <button class="fbtn gold" onclick="tg(this,'fSq')">⭐ لاعبو تشكيلتنا</button>
+    <input type="text" id="q" placeholder="ابحث…" oninput="renderDb()" style="min-width:150px">
+    <span class="count-pill" id="cnt"></span>
+  </div>
+  <div class="twrap"><table><thead id="th"></thead><tbody id="tb"></tbody></table></div>
+  <div class="note">📌 <b>البلنتيات:</b> «بلنتي ✓» منفذ أول موثق بأرقام 25/26 الرسمية: ثياغو 8 بلنتيات (الأعلى) · بالمر 5 · برونو وماتيتا وخيمينيز وكالفرت-لوين 4 لكل منهم · هالاند منفذ السيتي · «بلنتي؟» مرجح يُحسم من الوديات — ركلة مضمونة ≈ 30–40 نقطة موسمية إضافية، وهذا بند مراقبة أساسي كل خميس.</div>
+  <div class="note red">⚠️ xG/xA تقديرات نموذجية (≈) تُستبدل بأرقام Opta فور فتح فيد FPL أواخر يوليو. عمود البري سيزون يمتلئ أسبوعيًا — بدأ اليوم فقط.</div>
+</div>
+</section>
+
+<!-- ================================================= EXPLORER ================================================= -->
+<section class="view" id="v-exp">
+<div class="dash">
+  <div class="sec-title">المدافع الرابع أم المهاجم الثالث؟ — الحسم بالأرقام</div>
+  <div class="sec-sub">موسم 25/26 (أول مواسم DEFCON) أثبت: <b>المدافعون أقوى مركز قيمةً مقابل السعر والمهاجمون الأضعف</b> — مع استثناء واحد مهم بالأسفل.</div>
+  <div style="margin:14px 0">
+    <div class="vfm-row"><div class="lab">مدافع رخيص (5م)</div><div class="track"><div class="fill" style="width:100%;background:#15803D">≈33 نقطة/مليون — سينيسي 175 نقطة بسعر 5.2</div></div></div>
+    <div class="vfm-row"><div class="lab">وسط دفاعي رخيص</div><div class="track"><div class="fill" style="width:98%;background:#166534">31.6 نقطة/مليون (رقم رسمي) — أندرسون 180 نقطة بسعر 5.5</div></div></div>
+    <div class="vfm-row"><div class="lab">حارس أساسي</div><div class="track"><div class="fill" style="width:82%;background:#2563EB">≈27 نقطة/مليون — رايا 162</div></div></div>
+    <div class="vfm-row"><div class="lab">وسط هجومي متوسط</div><div class="track"><div class="fill" style="width:70%;background:#C99A3B;color:#0F172A">≈23 نقطة/مليون — نمط روجرز</div></div></div>
+    <div class="vfm-row"><div class="lab">مهاجم بريميوم</div><div class="track"><div class="fill" style="width:48%;background:#DC2626">≈16 نقطة/مليون — هالاند 239 بسعر 15.1 (يُشترى للسقف)</div></div></div>
+  </div>
+  <div class="grid g3">
+    <div class="card good"><h3>لماذا انقلبت الموازين؟</h3><p>DEFCON: نقطتان للمدافع عند 10 تدخلات وللوسط عند 12. من أعلى 10 مستفيدين: 5 قلوب دفاع و5 ارتكاز — <b>ولا مهاجم واحد</b>. غيهي وسينيسي وتروفير وغابرييل وفان هيكه تجاوزوا أسعارهم بفارق ضخم.</p></div>
+    <div class="card gold"><h3>الاستثناء المصحح (تدقيق v3)</h3><p>ثياغو ليس «مهاجمًا ثالثًا متوسطًا» — إنه <b>وصيف الهدافين بـ22 هدفًا</b> بسعر 7.0: إنتاج نخبوي بكفاءة عالية معًا. القاعدة تنطبق على أي بديل آخر له، لا عليه. لذا بقي أساسيًا وارتفع لـ83.</p></div>
+    <div class="card warn"><h3>المعادلة النهائية</h3><p><b>2 بريميوم للسقف (هالاند + برونو) + ثياغو استثناء الكفاءة + جيش دفاعي رخيص عالي الكفاءة.</b> عند أي ترقية مستقبلية: المدافع الرابع القوي (غيهي/تاركوفسكي) أولى من أي مهاجم متوسط جديد.</p></div>
+  </div>
+
+  <div class="sec-title" style="margin-top:20px">مستكشف الصفقات تحت الرادار</div>
+  <div class="controls">
+    <span class="lbl">المركز:</span>
+    <button class="fbtn on" data-epos="ALL" onclick="setEpos(this)">الكل</button>
+    <button class="fbtn" data-epos="GK" onclick="setEpos(this)">حراس</button>
+    <button class="fbtn" data-epos="DEF" onclick="setEpos(this)">دفاع</button>
+    <button class="fbtn" data-epos="MID" onclick="setEpos(this)">وسط</button>
+    <button class="fbtn" data-epos="FWD" onclick="setEpos(this)">هجوم</button>
+    <select id="priceSel" onchange="renderEx()">
+      <option value="99">كل الأسعار</option>
+      <option value="5">≤ 5.0م</option>
+      <option value="5.5">≤ 5.5م</option>
+      <option value="6.5">≤ 6.5م</option>
+    </select>
+    <span class="count-pill" id="ecnt"></span>
+  </div>
+  <div class="twrap"><table style="min-width:980px"><thead><tr><th>اللاعب</th><th>النادي</th><th>المركز</th><th>سعر</th><th>زخم آخر 5–10</th><th>لماذا تحت الرادار؟</th><th>سكور</th></tr></thead><tbody id="etb"></tbody></table></div>
+  <div class="note">قواعد: ١) صاعدان اثنان كحد أقصى · ٢) الموسومون «تحقق الخميس» ملفهم يُحسم بالتحديث الأسبوعي · ٣) سكور الاستكشاف = قيمة × غفلة الأعين × أمان دقائق — يختلف عن سكور التشكيلة.</div>
+</div>
+</section>
+
+<!-- ================================================= RISK ================================================= -->
+<section class="view" id="v-risk">
+<div class="dash">
+  <div class="sec-title">خارطة المدربين — أكبر إعادة تشكيل في تاريخ الدوري</div>
+  <div class="grid g3">
+    <div class="card good"><h3>أرسنال — أرتيتا <span class="chip good">استمرارية</span></h3><p>البطل بعد 22 سنة + بلوغ نهائي دوري الأبطال ضد باريس (نتيجته أوثّقها الخميس) والمدرب الأقدم. منظومة 18–19 شباكًا = أوثق أصل بالفانتزي (3 لاعبين — الحد الأقصى)، مع ملاحظة: خماسي أرسنال اكتسح تشكيلة الجماهير الرسمية.</p></div>
+    <div class="card warn"><h3>مان سيتي — ماريسكا <span class="chip risk">ما بعد بيب</span></h3><p>تلميذ غوارديولا بعد خروجه المدوّي من تشيلسي مطلع 2026. استحواذ بطيء الإيقاع — جيد لهالاند كمُنهٍ، مع مراقبة أول 3 جولات وودية إنتر.</p></div>
+    <div class="card blue"><h3>ليفربول — إيراولا <span class="chip weak">تحول جذري</span></h3><p>ضغط شرس وهجوم مباشر بالأجنحة. برحيل صلاح وكوناتيه وروبرتسون: خاكبو المستفيد الأكبر، سوبوسلاي مرشح رسمي لدور متقدم، والدفاع مغامرة (فان دايك 79 لا 88).</p></div>
+    <div class="card purple"><h3>تشيلسي — تشابي ألونسو <span class="chip ended">مشروع جديد</span></h3><p>بعد المركز العاشر: نظام أجنحة مرتدة 3-4-2-1 ولا أوروبا = راحة لبالمر وجواو بيدرو. على قائمة المراقبة بعد أول وديتين — لا أحد بالتشكيلة بعد.</p></div>
+    <div class="card"><h3>مان يونايتد — كاريك <span class="chip good">مثبَّت</span></h3><p>عقد جديد بعد إنقاذ النصف الثاني. برونو: دور حر + بلنتيات + ركنيات = ثلاث طرق للنقاط، وشيشكو مهاجمه الأول بأسهل جدول بالدوري.</p></div>
+    <div class="card blue"><h3>أستون فيلا — إيمري <span class="chip good">استمرارية + أبطال 🆕</span></h3><p>المركز الرابع + لقب الدوري الأوروبي = أنجح مواسمهم حديثًا، لكن دخول دوري الأبطال يضيف قيد الدوران على روجرز وواتكينز — استقرار فني نادر بضغط جدول جديد. تيليمانس رحل ليونايتد.</p></div>
+    <div class="card bad"><h3>توتنهام — دي زيربي <span class="chip critical">إنفاق ضخم + ضبابية</span></h3><p>نجا بالجولة الأخيرة ثم أنفق: توناللي 100م، ماتيوس فرنانديز 85م، فان هيكه 52م + 3 أحرار. مشروع غير مقروء — فان هيكه وسينيسي دكة فقط حتى تتضح التشكيلة في وديات أستراليا.</p></div>
+  </div>
+
+  <div class="sec-title" style="margin-top:20px">رادار المخاطر حتى إغلاق النافذة (1 سبتمبر — بعد GW2!)</div>
+  <div class="grid g3">
+    <div class="card bad"><h3>🔴 قاعدة اليوم الأخير</h3><p>صفقات أغسطس الكبرى تنسف الخطط تاريخيًا (إيزاك وسيمينيو مثالان حيان). لا تبنِ على لاعب متداول في صفقة، واحفظ تحويلاتك المجانية الأولى لما بعد الإغلاق.</p></div>
+    <div class="card warn"><h3>🟠 ملفات مفتوحة</h3><p>١) صلاح بلا نادٍ — توقيعه لمنافس بالدوري = دخول فوري · ٢) وجهة بووين بعد هبوط وست هام — عودته تعيد فتح مركز الهجوم · ٣) هينكابيه وبرشلونة يهزان عمق دفاع أرسنال.</p></div>
+    <div class="card blue"><h3>🔵 نيوكاسل ولّادة المفاجآت</h3><p>باعوا غوردون وتوناللي وجلبوا الحارس جاوين فقط — سيولة ضخمة وجدول هجومي مغرٍ من GW3. أي صفقة هجومية كبرى لهم تدخل قائمة المتابعة فورًا. الملف رقم 1 لتحديثات الخميس.</p></div>
+    <div class="card warn"><h3>🟠 إرهاق نصف النهائي والنهائي</h3><p>لاعبو الأرجنتين وإسبانيا وإنجلترا وفرنسا يعودون متأخرين: سينيسي وإنزو (نهائي الغد)، غيهي وأندرسون وبالمر (إنجلترا)، شرقي (فرنسا). راقب دقائقهم بآخر وديتين.</p></div>
+    <div class="card good"><h3>🟢 المستريحون — ميزة GW1–4</h3><p>شيشكو وسوبوسلاي وتوناللي (منتخباتهم لم تتأهل) وروجرز وتاركوفسكي وغارنر (لم يُستدعوا) وثياغو (خروج مبكر) = جاهزية 100% حين يبدأ المرهقون تدريجيًا.</p></div>
+    <div class="card purple"><h3>🟣 ورقة الدرع الخيرية (16/8)</h3><p>أرسنال × سيتي بكارديف: البروفة الوحيدة بضغط حقيقي — تشكيلة ماريسكا الأولى وجاهزية هالاند وأدوار الركلات. تُقفل بها ركيزة البري سيزون في نسخة 20 أغسطس النهائية.</p></div>
+  </div>
+</div>
+</section>
+
+<!-- ================================================= CALENDAR ================================================= -->
+<section class="view" id="v-cal">
+<div class="dash">
+  <div class="sec-title">فيكشر البريميرليغ 2026/27 — الجولات الموثقة</div>
+  <div class="sec-sub">من البيان الرسمي للرابطة (صدر 19 يونيو) · الموسم: 21 أغسطس 2026 → 30 مايو 2027 · 33 جولة أسبوعية + 5 جولات منتصف أسبوع · التوقيت المحلي بريطانيا (توقيت السعودية = +2 ساعات) · كل خميس أملأ الجولات التالية تباعًا حتى اكتمال الـ38</div>
+
+  <div class="sec-title" style="font-size:14px">شبكة الصعوبة الملوّنة — أول 6 جولات (بأسلوب الصورة التي أرسلتها، لكن لموسم 26/27 الصحيح)</div>
+  <div class="sec-sub">H = بأرضه · A = خارجها · 🟩 فاتح=سهلة جدًا · 🟢 غامق=سهلة · ⬜ متوسطة · 🟥 فاتح=صعبة · 🟥 غامق=قاسية · ✅ الأعمدة الستة مكتملة وموثقة 100% من الصفحة الرسمية للرابطة (كل الـ380 مباراة بحوزتنا الآن) — امتدادها لبقية الجولات يضاف تباعًا</div>
+  <div class="twrap" style="margin-bottom:18px">
+  <table class="fdrgrid">
+    <thead><tr><th style="text-align:start">النادي</th><th>GW1</th><th>GW2</th><th>GW3</th><th>GW4</th><th>GW5</th><th>GW6</th></tr></thead>
+    <tbody>
+      <tr><td class="team">أرسنال ARS</td><td class="f1">COV (H)</td><td class="f3">AVL (A)</td><td class="f4">CHE (H)</td><td class="f3">SUN (A)</td><td class="f3">BHA (A)</td><td class="f2">LEE (H)</td></tr>
+      <tr><td class="team">أستون فيلا AVL</td><td class="f3">BHA (A)</td><td class="f5">ARS (H)</td><td class="f2">HUL (A)</td><td class="f3">NFO (H)</td><td class="f3">TOT (A)</td><td class="f2">BRE (H)</td></tr>
+      <tr><td class="team">بورنموث BOU</td><td class="f5">MCI (A)</td><td class="f3">EVE (H)</td><td class="f4">NEW (A)</td><td class="f3">BRE (H)</td><td class="f4">LIV (H)</td><td class="f4">CHE (A)</td></tr>
+      <tr><td class="team">برينتفورد BRE</td><td class="f3">TOT (H)</td><td class="f3">LEE (A)</td><td class="f2">SUN (H)</td><td class="f3">BOU (A)</td><td class="f4">CHE (H)</td><td class="f3">AVL (A)</td></tr>
+      <tr><td class="team">برايتون BHA</td><td class="f3">AVL (H)</td><td class="f4">CHE (A)</td><td class="f2">LEE (H)</td><td class="f2">COV (A)</td><td class="f5">ARS (H)</td><td class="f3">SUN (A)</td></tr>
+      <tr><td class="team">تشيلسي CHE</td><td class="f3">FUL (A)</td><td class="f3">BHA (H)</td><td class="f5">ARS (A)</td><td class="f1">HUL (H)</td><td class="f3">BRE (A)</td><td class="f2">BOU (H)</td></tr>
+      <tr><td class="team">كوفنتري COV</td><td class="f5">ARS (A)</td><td class="f2">HUL (H)</td><td class="f5">MCI (A)</td><td class="f3">BHA (H)</td><td class="f3">NFO (A)</td><td class="f4">NEW (H)</td></tr>
+      <tr><td class="team">كريستال بالاس CRY</td><td class="f3">EVE (A)</td><td class="f4">MCI (H)</td><td class="f3">FUL (A)</td><td class="f1">IPS (H)</td><td class="f3">LEE (A)</td><td class="f3">NFO (H)</td></tr>
+      <tr><td class="team">إيفرتون EVE</td><td class="f2">CRY (H)</td><td class="f3">BOU (A)</td><td class="f4">MUN (H)</td><td class="f3">TOT (A)</td><td class="f1">IPS (H)</td><td class="f2">HUL (A)</td></tr>
+      <tr><td class="team">فولهام FUL</td><td class="f4">CHE (H)</td><td class="f3">SUN (A)</td><td class="f2">CRY (H)</td><td class="f4">LIV (A)</td><td class="f4">MUN (H)</td><td class="f2">IPS (A)</td></tr>
+      <tr><td class="team">هال سيتي HUL</td><td class="f4">MUN (H)</td><td class="f2">COV (A)</td><td class="f3">AVL (H)</td><td class="f4">CHE (A)</td><td class="f4">NEW (A)</td><td class="f3">EVE (H)</td></tr>
+      <tr><td class="team">إيبسويتش IPS</td><td class="f2">SUN (H)</td><td class="f5">MUN (A)</td><td class="f5">LIV (A)</td><td class="f3">CRY (A)</td><td class="f3">EVE (A)</td><td class="f2">FUL (H)</td></tr>
+      <tr><td class="team">ليدز LEE</td><td class="f3">NFO (A)</td><td class="f3">BRE (H)</td><td class="f3">BHA (A)</td><td class="f4">NEW (H)</td><td class="f2">CRY (H)</td><td class="f5">ARS (A)</td></tr>
+      <tr><td class="team">ليفربول LIV</td><td class="f4">NEW (A)</td><td class="f2">NFO (H)</td><td class="f2">IPS (A)</td><td class="f2">FUL (H)</td><td class="f3">BOU (A)</td><td class="f4">MCI (H)</td></tr>
+      <tr><td class="team">مان سيتي MCI</td><td class="f1">BOU (H)</td><td class="f3">CRY (A)</td><td class="f1">COV (H)</td><td class="f4">MUN (A)</td><td class="f2">SUN (H)</td><td class="f4">LIV (A)</td></tr>
+      <tr><td class="team">مان يونايتد MUN</td><td class="f1">HUL (A)</td><td class="f1">IPS (H)</td><td class="f3">EVE (A)</td><td class="f4">MCI (H)</td><td class="f3">FUL (A)</td><td class="f3">TOT (H)</td></tr>
+      <tr><td class="team">نيوكاسل NEW</td><td class="f4">LIV (H)</td><td class="f4">TOT (A)</td><td class="f2">BOU (H)</td><td class="f3">LEE (A)</td><td class="f1">HUL (H)</td><td class="f2">COV (A)</td></tr>
+      <tr><td class="team">نوتنغهام فورست NFO</td><td class="f2">LEE (H)</td><td class="f4">LIV (A)</td><td class="f3">TOT (H)</td><td class="f3">AVL (A)</td><td class="f2">COV (H)</td><td class="f3">CRY (A)</td></tr>
+      <tr><td class="team">سندرلاند SUN</td><td class="f2">IPS (A)</td><td class="f3">FUL (H)</td><td class="f3">BRE (A)</td><td class="f5">ARS (H)</td><td class="f5">MCI (A)</td><td class="f3">BHA (H)</td></tr>
+      <tr><td class="team">توتنهام TOT</td><td class="f3">BRE (A)</td><td class="f3">NEW (H)</td><td class="f3">NFO (A)</td><td class="f3">EVE (H)</td><td class="f3">AVL (H)</td><td class="f4">MUN (A)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="sec-title" style="font-size:14px">🧢 ترشيحا القيادة لكل جولة — من الشبكة أعلاه مباشرة</div>
+  <div class="twrap" style="margin-bottom:18px">
+  <table style="min-width:860px">
+    <thead><tr><th>الجولة</th><th>الترشيح الأول</th><th>الترشيح الثاني</th><th>المنطق + التحذير</th></tr></thead>
+    <tbody>
+      <tr><td><b>GW1</b></td><td class="pname">هالاند — BOU (H) 🟩</td><td class="pname">برونو — HUL (A) 🟩</td><td class="fx">هالاند «البدّاء السريع» ضد أسوأ جدول بالدوري · برونو أول اختبار للافتتاحية الذهبية. الفيصل: من تريده مضاعفًا أكثر مواسم طويلة</td></tr>
+      <tr><td><b>GW2</b></td><td class="pname">برونو — IPS (H) 🟩</td><td class="pname">هالاند — CRY (A) ⬜</td><td class="fx">تنقلب الأفضلية: إيبسويتش بأولد ترافورد أرحم من دفاع بالاس (أفضل وحدة سعرية بالدوري) خارجًا</td></tr>
+      <tr><td><b>GW3</b></td><td class="pname">هالاند — COV (H) 🟩</td><td class="pname">برونو — EVE (A) ⬜</td><td class="fx">تصحيح رسمي: كوفنتري بالاتحاد في GW3 لا GW5 — أوضح شارة بالجولات الست كلها</td></tr>
+      <tr><td><b>GW4</b></td><td class="pname">خاكبو/سوبوسلاي — FUL (H) 🟢</td><td class="pname">غابرييل — SUN (A) ⬜</td><td class="fx">أسبوع الديربي (يونايتد×سيتي بأولد ترافورد): ممنوع الاقتراب من طرفيه — ليفربول×فولهام بأنفيلد هي الشارة الأنظف، وغابرييل خارجًا بسندرلاند (الموقع صُحّح رسميًا) رهان التميّز</td></tr>
+      <tr><td><b>GW5</b></td><td class="pname">هالاند — SUN (H) 🟢</td><td class="pname">برونو — FUL (A) ⬜</td><td class="fx">هالاند بالاتحاد ضد سندرلاند — ثاني إغراءات التريبل كابتن تواليًا (بعد COV بالجولة 3): قرارنا الثابت حفظه للمزدوجة</td></tr>
+      <tr><td><b>GW6</b></td><td class="pname">برونو — TOT (H) ⬜</td><td class="pname">شيشكو — TOT (H) ⬜</td><td class="fx">قمة ليفربول×سيتي بأنفيلد (موثقة 10 أكتوبر) تحرق خيارَي البريميوم الآخرَين — ثنائي يونايتد بأرضه هو الملاذ، وشيشكو خيار التميّز الأرخص بنفس المباراة</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note">🔄 الجولات الست موثقة رسميًا بالكامل — من الخميس القادم أمدّ الشبكة والترشيحات جولةً جولة حتى GW38 (البيانات كلها بحوزتنا الآن). الترشيحات تفترض جاهزية اللاعب (تقاطَع دائمًا مع تبويب 🏥 قبل التثبيت).</div>
+  <div class="sec-title" style="font-size:14px">الجولة 1 — كاملة وموثقة ✅</div>
+  <div class="twrap">
+  <table style="min-width:760px">
+    <thead><tr><th>اليوم</th><th>التوقيت (بريطانيا / السعودية)</th><th>المباراة</th><th>ملاحظة فانتزية</th></tr></thead>
+    <tbody>
+      <tr><td>الجمعة 21/8</td><td>20:00 / 22:00</td><td class="pname">أرسنال × كوفنتري</td><td class="fx">الافتتاح — البطل ضد الصاعد: غابرييل ورايا يبدآن هنا</td></tr>
+      <tr><td>السبت 22/8</td><td>12:30 / 14:30</td><td class="pname">هال سيتي × مان يونايتد</td><td class="fx">مباراة برونو وشيشكو وكاسيميرو — أول اختبار الجدول الذهبي</td></tr>
+      <tr><td>السبت 22/8</td><td>15:00 / 17:00</td><td class="pname">إيفرتون × كريستال بالاس</td><td class="fx">غارنر وتاركوفسكي داخلًا ضد غيهي ود. هندرسون خارجًا — نصف مستكشفنا بملعب واحد!</td></tr>
+      <tr><td>السبت 22/8</td><td>15:00 / 17:00</td><td class="pname">إيبسويتش × سندرلاند</td><td class="fx">جاكا ورويفس وألديريتي بأول خروج</td></tr>
+      <tr><td>السبت 22/8</td><td>15:00 / 17:00</td><td class="pname">نوتنغهام فورست × ليدز</td><td class="fx">غيبس-وايت وموريو داخلًا ضد كالفرت-لوين</td></tr>
+      <tr><td>السبت 22/8</td><td>17:30 / 19:30</td><td class="pname">برينتفورد × توتنهام</td><td class="fx">⚡ ثياغو وكيليهر مباشرة ضد مشروع دي زيربي وفان هيكه — أهم مباراة لتشكيلتنا بالجولة</td></tr>
+      <tr><td>الأحد 23/8</td><td>14:00 / 16:00</td><td class="pname">برايتون × أستون فيلا</td><td class="fx">قُدّمت لمشاركة برايتون بملحق دوري المؤتمر الخميس السابق — روجرز وواتكينز خارجًا</td></tr>
+      <tr><td>الأحد 23/8</td><td>14:00 / 16:00</td><td class="pname">مان سيتي × بورنموث</td><td class="fx">هالاند بأرضه ضد أسوأ جدول بالدوري — مباراة الكابتن</td></tr>
+      <tr><td>الأحد 23/8</td><td>16:30 / 18:30</td><td class="pname">نيوكاسل × ليفربول</td><td class="fx">أول قمة: فان دايك وخاكبو تحت ضغط سانت جيمس فورًا</td></tr>
+      <tr><td>الإثنين 24/8</td><td>20:00 / 22:00</td><td class="pname">فولهام × تشيلسي</td><td class="fx">ي. أندرسن وهـ. ويلسون ضد افتتاحية ألونسو — بلا إنزو غالبًا (إرهاق النهائي)</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="sec-title" style="font-size:14px;margin-top:16px">الجولة 2 — كاملة وموثقة ✅</div>
+  <div class="twrap">
+  <table style="min-width:700px">
+    <thead><tr><th>اليوم</th><th>التوقيت</th><th>المباراة</th><th>ملاحظة</th></tr></thead>
+    <tbody>
+      <tr><td>الجمعة 28/8</td><td>20:00 / 22:00</td><td class="pname">كريستال بالاس × مان سيتي</td><td class="fx">هالاند خارجًا — ودفاع بالاس أفضل وحدة سعرية</td></tr>
+      <tr><td>السبت 29/8</td><td>12:30 / 14:30</td><td class="pname">ليفربول × نوتنغهام فورست</td><td class="fx">أول أنفيلد لإيراولا</td></tr>
+      <tr><td>السبت 29/8</td><td>15:00 / 17:00</td><td class="pname">بورنموث × إيفرتون</td><td class="fx">فرصة شباك نظيفة لتاركوفسكي وغارنر</td></tr>
+      <tr><td>السبت 29/8</td><td>15:00 / 17:00</td><td class="pname">كوفنتري × هال</td><td class="fx">أول مواجهة صاعدَين — عيّنة مستواهم الحقيقي</td></tr>
+      <tr><td>السبت 29/8</td><td>17:30 / 19:30</td><td class="pname">توتنهام × نيوكاسل</td><td class="fx">أول اختبار كبير لمشروع دي زيربي</td></tr>
+      <tr><td>الأحد 30/8</td><td>14:00 / 16:00</td><td class="pname">تشيلسي × برايتون</td><td class="fx">قُدّمت لملحق برايتون الأوروبي</td></tr>
+      <tr><td>الأحد 30/8</td><td>14:00 / 16:00</td><td class="pname">ليدز × برينتفورد</td><td class="fx">ثياغو خارجًا — قابل للنقاط</td></tr>
+      <tr><td>الأحد 30/8</td><td>14:00 / 16:00</td><td class="pname">سندرلاند × فولهام</td><td class="fx">جاكا ولو فيه بأول ظهور منزلي</td></tr>
+      <tr><td>الأحد 30/8</td><td>16:30 / 18:30</td><td class="pname">مان يونايتد × إيبسويتش</td><td class="fx">مباراة شارة برونو المرشحة</td></tr>
+      <tr><td>الإثنين 31/8</td><td>20:00 / 22:00</td><td class="pname">أستون فيلا × أرسنال</td><td class="fx">قبل إغلاق النافذة بساعات! أول قمة لروجرز وواتكينز ضد البطل</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="sec-title" style="font-size:14px;margin-top:16px">محطات موثقة لاحقة — للتخطيط بعيد المدى</div>
+  <div class="grid g3">
+    <div class="card bad"><h3>🔥 جولة 21 نوفمبر (كاملة)</h3><p><b>ليفربول × مان يونايتد</b> · <b>نيوكاسل × أرسنال</b> · سيتي × فولهام · فيلا × سندرلاند · تشيلسي × ليدز · برينتفورد × إيفرتون · بورنموث × فورست · كوفنتري × بالاس · هال × برايتون · توتنهام × إيبسويتش. أسبوع قمم — جهّز أوراقك قبله لا خلاله.</p></div>
+    <div class="card warn"><h3>🔥 جولة 28 نوفمبر (كاملة)</h3><p><b>أرسنال × مان سيتي</b> (إعادة الدرع الخيرية بالإمارات!) · <b>إيفرتون × ليفربول</b> (ديربي الميرسي) · يونايتد × برينتفورد · فورست × تشيلسي · سندرلاند × توتنهام · برايتون × نيوكاسل · بالاس × هال · فولهام × بورنموث · إيبسويتش × فيلا · ليدز × كوفنتري.</p></div>
+    <div class="card blue"><h3>📌 معالم مؤكدة أخرى</h3><p>منتصف أسبوع 2 ديسمبر: برينتفورد × أرسنال، فيلا × إيفرتون، بورنموث × برايتون · بوكسينغ داي: برنامج كامل تقليدي · الختام: الأحد 30 مايو 2027 بانطلاق موحد لكل المباريات · ⏰ <b>حسم الديدلاين:</b> مصدر FPL يثبّت إغلاق GW1 السبت 22/8 الساعة 11:30 بتوقيت بريطانيا (13:30 سعودية) رغم افتتاحية الجمعة — وضع غريب نوثقه نهائيًا مع إطلاق اللعبة؛ الخطة الآمنة: أنهِ فريقك قبل الجمعة مساءً.</p></div>
+  </div>
+  <div class="note">📥 الجدول الكامل (380 مباراة) منشور رسميًا — كل تحديث خميس أملأ هنا الجولات الثلاث القادمة بتفاصيلها وملاحظاتها الفانتزية، فيظل هذا التبويب مفكرتك الموسمية الحية حتى مايو 2027.</div>
+</div>
+</section>
+
+<!-- ================================================= INJURIES ================================================= -->
+<section class="view" id="v-inj">
+<div class="dash">
+  <div class="sec-title">نشرة الإصابات — الحالة والمدة المتوقعة</div>
+  <div class="sec-sub">موثقة من بيانات الأندية والمنتخبات وتصريحات المدربين حتى 18 يوليو · تُحدَّث كل خميس 9 مساءً حتى نهاية الموسم · «احتمال الغياب» تقديرنا لجاهزية GW1 (21 أغسطس)</div>
+  <div class="twrap">
+  <table style="min-width:1000px">
+    <thead><tr><th>اللاعب</th><th>النادي</th><th>الإصابة</th><th>المصدر والتاريخ</th><th>المدة المتوقعة</th><th>احتمال غياب GW1</th><th>الأثر على تشكيلتنا</th></tr></thead>
+    <tbody>
+      <tr><td class="pname">رودري</td><td>مان سيتي</td><td class="fx">جراحة مقررة بعد المونديال (غير معلنة التفاصيل)</td><td class="fx">تقارير رسمية — يوليو</td><td class="fx">يغيب عن الأسابيع الافتتاحية لموسم 26/27</td><td><span class="chip critical">🔴 مؤكد ~95%</span></td><td class="fx"><b>مكسب لنا:</b> أندرسون اشتُري جزئيًا كغطائه — دقائقه ترتفع (76←79) · وسط السيتي أضعف مؤقتًا: راقب صلابتهم الدفاعية قبل الاعتماد على شباك هالاند النظيفة</td></tr>
+      <tr><td class="pname">تيمبر ⭐</td><td>أرسنال</td><td class="fx">إصابة أربية — <b>غاب عن كأس العالم بالكامل</b> (أعلنت هولندا انسحابه 8 يونيو)</td><td class="fx">بيان المنتخب الهولندي + Arsenal.com</td><td class="fx">~6 أسابيع مرت — لا تحديث رسمي على تعافيه بعد</td><td><span class="chip weak">🟡 شكوك ~50%</span></td><td class="fx"><b>في تشكيلتنا الأساسية!</b> بند المراقبة رقم 1: إن لم يشارك في ودية جيرونا (1 أغسطس) يخرج فورًا لصالح غيهي أو تاركوفسكي — القرار في نسخة الخميس 6 أغسطس</td></tr>
+      <tr><td class="pname">ساليبا</td><td>أرسنال</td><td class="fx">سقط دون احتكاك أمام إسبانيا بنصف النهائي · موسمه 25/26 شهد 12 غيابًا بانتكاسات متكررة</td><td class="fx">متابعات المونديال — 15 يوليو</td><td class="fx">غير محددة — يصارع للحاق بمباراة المركز الثالث</td><td><span class="chip risk">🟠 مرجح ~70%</span></td><td class="fx">ليس في تشكيلتنا، لكن غيابه يرفع الضغط على غابرييل ويُضعف احتمالات الشباك النظيفة بأول جولتين — خصم نقطة واحدة احترازيًا من رايا وغابرييل عند تأكيد غيابه</td></tr>
+      <tr><td class="pname">أوغارتي</td><td>مان يونايتد</td><td class="fx">أربطة الركبة مع أوروغواي أمام إسبانيا — وصفها بـ«أخطر إصابة يواجهها لاعب» (رباط صليبي مرجح)</td><td class="fx">تصريحه الشخصي + تقارير النادي</td><td class="fx">أشهر طويلة</td><td><span class="chip critical">🔴 مؤكد ~99%</span></td><td class="fx">وسط يونايتد أخف دفاعيًا = عبء أكبر على كاسيميرو (سهم صاعد بالمستكشف) ومساحة هجومية أوسع لبرونو</td></tr>
+      <tr><td class="pname">دي ليخت</td><td>مان يونايتد</td><td class="fx">جراحة ظهر لإصابة مزمنة — غاب عن المونديال</td><td class="fx">بيان النادي — يونيو</td><td class="fx">قيد التأهيل — الجدول غير معلن</td><td><span class="chip risk">🟠 مرجح ~75%</span></td><td class="fx">دفاع يونايتد مرتبك البداية — لا يمس هجومنا (برونو/شيشكو) لكنه يستبعد أي فكرة عن مدافعي يونايتد رغم الجدول السهل</td></tr>
+      <tr><td class="pname">ريس جيمس</td><td>تشيلسي</td><td class="fx">انتكاسة في المونديال — احتمال غيابه عن بقية البطولة</td><td class="fx">متابعات المونديال</td><td class="fx">سجل انتكاسات متكرر — حذر ممتد</td><td><span class="chip weak">🟡 شكوك ~50%</span></td><td class="fx">يعزز قرارنا بصفر تشيلسي حاليًا رغم نظام ألونسو المغري للأظهرة المرتدة</td></tr>
+      <tr><td class="pname">ماديسون</td><td>توتنهام</td><td class="fx">عائد من قطع بالرباط الصليبي — أنهى الموسم بدقائق محدودة (20–25 دقيقة كبديل بتأكيد دي زيربي)</td><td class="fx">مؤتمر دي زيربي — مايو</td><td class="fx">بناء تدريجي عبر البري سيزون</td><td><span class="chip weak">🟡 جزئية ~50%</span></td><td class="fx">يزيد ضبابية أدوار توتنهام — يدعم إبقاء فان هيكه وسينيسي على الدكة فقط</td></tr>
+      <tr><td class="pname">إستيفاو</td><td>تشيلسي</td><td class="fx">عضلة خلفية أسوأ من التقدير الأولي — خسر قائمة البرازيل</td><td class="fx">تقارير أبريل–يونيو</td><td class="fx">غير محددة</td><td><span class="chip risk">🟠 مرجح ~70%</span></td><td class="fx">لا أثر مباشر — يُبقي جواو بيدرو الخيار الهجومي الأوضح في تشيلسي لقائمة المراقبة</td></tr>
+      <tr><td class="pname">هندرسون</td><td>برينتفورد</td><td class="fx">كسر غريب في الذراع قبيل المونديال</td><td class="fx">متابعات المونديال</td><td class="fx">حسب التئام الكسر</td><td><span class="chip weak">🟡 شكوك</span></td><td class="fx">لا يمس ثلاثيّنا البرينتفوردي (كيليهر/ثياغو/فان دن بيرغ) — وسطهم فقط</td></tr>
+      <tr><td class="pname">صلاح</td><td>بلا نادٍ</td><td class="fx">شد بالعضلة الخلفية خلال المونديال (طلب التبديل أمام إيران د57)</td><td class="fx">متابعات المونديال — يوليو</td><td class="fx">شد عضلي اعتيادي — أسابيع قليلة</td><td><span class="chip idle">— بلا نادٍ</span></td><td class="fx">يضاف لملفه المفتوح: وجهة مجهولة + إصابة + موسم هابط = حتى لو وقّع لمنافس، لا تتعجل إدخاله</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="sec-title" style="margin-top:20px">لوحة التحذيرات — مؤشر «لن يشارك» من تصريحات المؤتمرات الصحفية</div>
+  <div class="sec-sub">كل خميس 9 مساءً نحصد مؤتمرات المدربين الأسبوعية ونحوّل كلامهم إلى احتمالات غياب — لأن جملة المدرب يوم الجمعة أصدق من أي نشرة إصابات</div>
+  <div class="grid g4">
+    <div class="card bad"><h3>🔴 مؤكد الغياب (90%+)</h3><p><b>رودري</b> (جراحة معلنة) · <b>أوغارتي</b> (أربطة الركبة). القاعدة: لا يدخلون أي حسابات قبل تصريح عودة رسمي + مشاركة كاملة في ودية.</p></div>
+    <div class="card warn"><h3>🟠 غياب مرجح (~75%)</h3><p><b>دي ليخت</b> (تأهيل ظهر بلا جدول) · <b>ساليبا</b> إن تأكد غيابه عن مباراة الغد · <b>إستيفاو</b>. هؤلاء يُفترض غيابهم في كل تخطيط لأول 3 جولات حتى يثبت العكس.</p></div>
+    <div class="card gold"><h3>🟡 شكوك (~50%) — الأخطر فانتزيًا</h3><p><b>تيمبر</b> (من تشكيلتنا!) · <b>ماديسون</b> · <b>ريس جيمس</b>. منطقة الـ50% هي مقبرة النقاط: لاعب يبدأ على الدكة أو يُستبدل مبكرًا. قرار تيمبر النهائي بعد ودية جيرونا.</p></div>
+    <div class="card blue"><h3>🔵 رادار المؤتمرات الصحفية</h3><p>عبارات نلتقطها حرفيًا كل خميس: «سنقيّمه غدًا» = شك 50% · «لن نخاطر به» = غياب 75% · «يتدرب منفردًا» = غياب شبه مؤكد · «جاهز للمشاركة» بلا «أساسيًا» = احتمال دكة. أول حصاد فعلي: مؤتمرات ما قبل وديات 21–25 يوليو.</p></div>
+  </div>
+
+  <div class="note red">⭐ <b>قرار معلق على تشكيلتنا (الأهم):</b> تيمبر غاب عن المونديال كاملًا بإصابة أربية — وليس «مرتاحًا» كما ورد خطأً في v3 وتم تصحيحه. خطة الطوارئ الجاهزة: تيمبر ← غيهي (5.2) يوفر 1.3م فائضًا، أو ← تاركوفسكي (5.4). مهلة القرار: مشاركته من عدمها في جيرونا 1 أغسطس، والحسم النهائي في نسخة الخميس 6 أغسطس.</div>
+  <div class="note">🗓️ <b>دورة التحديث الجديدة:</b> كل خميس <b>9:00 مساءً</b> حتى نهاية موسم 26/27 (مايو 2027) — قبل الانطلاقة: إصابات + وديات + صفقات · وبعد الانطلاقة: نشرة إصابات الجولة + مؤتمرات الجمعة المبكرة + توصيات التحويلات والقيادة قبل كل موعد نهائي.</div>
+</div>
+</section>
+
+<div class="foot">غرفة عمليات الفانتزي v5.1 الموحدة · بيانات موثقة حتى 18 يوليو 2026 · الأسعار تقديرية حتى إطلاق FPL الرسمي · التحديث القادم: الخميس 23 يوليو 9:00 ص</div>
+
+<script>
+/* ---------- Navigation ---------- */
+function go(b){
+  document.querySelectorAll('#nav button').forEach(function(x){x.classList.remove('on')});
+  b.classList.add('on');
+  var t=b.getAttribute('data-t');
+  document.querySelectorAll('.view').forEach(function(v){v.classList.remove('on')});
+  document.getElementById('v-'+t).classList.add('on');
+  window.scrollTo({top:0});
+}
+/* ---------- Stats DB ---------- */
+var P=[
+ /* ---- مان سيتي ---- */
+ {name:"إيرلينغ هالاند",club:"مان سيتي",pos:"FWD",price:14.0,isNew:0,isCap:1,pen:"y",sq:1,s:{pts:239,g:27,a:8,xg:"≈28",xa:"≈7",ex:"الحذاء الذهبي + 8 صناعات (الوحيد بقائمتي الهدافين والصنّاع معًا) · 35 مساهمة إجمالية (الأعلى) · 10 أهداف حاسمة · 5 بآخر 5"},w:{gp:5,g:7,a:"—",note:"ثالث هدافي المونديال: ثنائية العراق + ثنائية السنغال + حسم كوت ديفوار + ثنائية مذهلة بمرمى البرازيل بثمن النهائي — قبل سقوط النرويج أمام إنجلترا بربع النهائي"},p:{note:"يبدأ 1 أغسطس × إنتر"}},
+ {name:"أنطوان سيمينيو",club:"مان سيتي",pos:"MID",price:8.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:202,g:17,a:"≈6",xg:"≈15",xa:"≈6",ex:"ثالث الهدافين (10 بورنموث + 7 سيتي) · 4 أهداف من خارج الصندوق (الأعلى مناصفة)"},w:{gp:"—",g:"—",a:"—",note:"مع غانا"},p:{note:"اختبار ماريسكا × إنتر"}},
+ {name:"ريان شرقي",club:"مان سيتي",pos:"MID",price:8.5,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:"≈8",a:12,xg:"≈7",xa:"≈11",ex:"12 صناعة من 19 بداية فقط — وصيف الصانعين بمعدل مرعب لكل دقيقة"},w:{gp:"—",g:"—",a:"—",note:"مع فرنسا لنصف النهائي"},p:{note:"عودة متأخرة"}},
+ {name:"إليوت أندرسون",club:"مان سيتي",pos:"MID",price:6.0,isNew:1,isCap:0,pen:null,sq:1,s:{pts:180,g:4,a:5,xg:"≈4",xa:"≈5",ex:"180 نقطة رسمية = خامس الوسط · أعلى قيمة وسط باللعبة (31.6 نقطة/مليون رسميًا) وظل تفاضليًا حتى النهاية (949 ألف فريق فقط)"},w:{gp:"—",g:"—",a:"—",note:"نجم إنجلترا لنصف النهائي — صفقة 116م القياسية"},p:{note:"غياب رودري يرفع دقائقه ▲"}},
+ {name:"رودري 🏥",club:"مان سيتي",pos:"MID",price:6.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"جراحة بعد المونديال"},w:{gp:"—",g:"—",a:"—",note:"شارك ثم تقررت الجراحة"},p:{note:"🔴 يغيب عن الأسابيع الافتتاحية"}},
+ {name:"دوناروما",club:"مان سيتي",pos:"GK",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:0,a:0,xg:"—",xa:"—",ex:"موسمه الأول بعد الانتقال من باريس"},w:{gp:"—",g:"—",a:"—",note:"لم يظهر بالمونديال — راحة (حسم ملحق إيطاليا غير موثق عندي)"},p:{note:"قيد التتبع"}},
+ {name:"غفارديول",club:"مان سيتي",pos:"DEF",price:6.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"≈3",a:"≈2",xg:"≈3",xa:"≈2",ex:"تحول لقلب دفاع بعد قدوم آيت نوري"},w:{gp:"—",g:"—",a:"—",note:"مع كرواتيا"},p:{note:"قيد التتبع"}},
+ {name:"آيت نوري",club:"مان سيتي",pos:"DEF",price:6.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"11 مساهمة هجومية بموسمه الأخير مع وولفز قبل الانتقال"},w:{gp:"—",g:"—",a:"—",note:"— (مشاركة الجزائر غير موثقة عندي)"},p:{note:"قيد التتبع"}},
+ /* ---- مان يونايتد ---- */
+ {name:"برونو فرنانديز",club:"مان يونايتد",pos:"MID",price:11.5,isNew:0,isCap:1,pen:"y",sq:1,s:{pts:235,g:8,a:21,xg:"≈9",xa:"≈16",ex:"21 صناعة قياسية + 136 فرصة + 12 حصادًا عشريًا (الأعلى) · منذ تولي كاريك (GW22): 7.6 نقطة/مباراة والأول بالدوري نقاطًا (129) ومساهمات (20)"},w:{gp:"—",g:"—",a:"—",note:"مشوار متوسط مع البرتغال"},p:{note:"بدأ اليوم × ريكسهام ✓"}},
+ {name:"بنيامين شيشكو",club:"مان يونايتد",pos:"FWD",price:7.5,isNew:0,isCap:0,pen:"m",sq:1,s:{pts:"—",g:11,a:"≈3",xg:"≈13",xa:"≈2",ex:"11 هدفًا بموسمه الأول — نصفه الثاني مع كاريك أقوى بوضوح + أسهل جدول 26/27"},w:{gp:0,g:0,a:0,note:"غاب عن المونديال = راحة كاملة (وضع تأهل سلوفينيا غير موثق عندي — الثابت أنه لم يشارك)"},p:{note:"لعب اليوم × ريكسهام ✓"}},
+ {name:"برايان مبومو",club:"مان يونايتد",pos:"MID",price:7.5,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:11,a:"≈6",xg:"≈10",xa:"≈6",ex:"11 هدفًا كوسط + من ترشيحات نهاية الموسم المنتظمة"},w:{gp:"—",g:"—",a:"—",note:"— (مشاركة الكاميرون غير موثقة عندي)"},p:{note:"قيد التتبع"}},
+ {name:"ماتيوس كونيا",club:"مان يونايتد",pos:"FWD",price:7.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"منافس شيشكو وشريكه بالهجوم"},w:{gp:"—",g:"—",a:"—",note:"مع البرازيل"},p:{note:"قيد التتبع"}},
+ {name:"كاسيميرو",club:"مان يونايتد",pos:"MID",price:5.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:9,a:"≈2",xg:"≈6",xa:"≈2",ex:"مفاجأة الأرقام: 9 أهداف منها 8 رأسيات (الأعلى بالدوري)! ممكّن هدّاف بركنيات برونو + غياب أوغارتي يثبّته"},w:{gp:"—",g:"—",a:"—",note:"مع البرازيل"},p:{note:"بدأ اليوم ✓"}},
+ {name:"تيليمانس 🆕",club:"مان يونايتد",pos:"MID",price:6.0,isNew:1,isCap:0,pen:"m",sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"صفقة 35.3م£ من فيلا — عمق وسط بعد إصابة أوغارتي"},w:{gp:"—",g:"—",a:"—",note:"مع بلجيكا"},p:{note:"قيد الدمج"}},
+ {name:"دالوت",club:"مان يونايتد",pos:"DEF",price:5.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"من ترشيحات نهاية الموسم — لكن دفاع يونايتد مرتبك (دي ليخت مصاب)"},w:{gp:"—",g:"—",a:"—",note:"مع البرتغال"},p:{note:"قيد التتبع"}},
+ {name:"أوغارتي 🏥",club:"مان يونايتد",pos:"MID",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"أربطة الركبة أمام إسبانيا — «أخطر إصابة»"},p:{note:"🔴 أشهر طويلة"}},
+ /* ---- أرسنال ---- */
+ {name:"ديفيد رايا",club:"أرسنال",pos:"GK",price:5.8,isNew:0,isCap:0,pen:null,sq:1,s:{pts:162,g:0,a:0,xg:"—",xa:"—",ex:"القفاز الذهبي: 19 شباكًا · 60 تصديًا فقط · 11 بونص"},w:{gp:"—",g:"—",a:"—",note:"احتياطي إسبانيا في نهائي الغد"},p:{note:"يبدأ 1 أغسطس"}},
+ {name:"غابرييل",club:"أرسنال",pos:"DEF",price:7.0,isNew:0,isCap:1,pen:null,sq:1,s:{pts:"200+",g:3,a:"≈2",xg:"≈4",xa:"≈1",ex:"18 شباكًا نظيفة · كابتن التميّز في GW4"},w:{gp:"—",g:"—",a:"—",note:"خروج البرازيل بثمن النهائي أمام النرويج (موثق) = عودة أبكر من المتوقع — مكسب راحة لكل البرازيليين"},p:{note:"يبدأ 1 أغسطس × جيرونا"}},
+ {name:"يوريان تيمبر 🏥",club:"أرسنال",pos:"DEF",price:6.5,isNew:0,isCap:0,pen:null,sq:1,s:{pts:"—",g:"≈4",a:"≈4",xg:"≈3",xa:"≈4",ex:"⚠️ الحقيقة الكاملة (v5.1): اختير بتشكيلة الجماهير الرسمية لكنه غاب عن آخر شهرين بإصابة ركبة منذ منتصف مارس — وتعثر أرسنال بدأ بعدها مباشرة. زخم آخر 10 جولاته = صفر مشاركة"},w:{gp:0,g:0,a:0,note:"⚠️ ~4 أشهر غياب متصلة: ركبة مارس ثم استبعاد هولندا يونيو"},p:{note:"🔴 خُفّض لبديل — لا يستعيد مكانه إلا بمشاركة كاملة موثقة"}},
+ {name:"ساليبا 🏥",club:"أرسنال",pos:"DEF",price:6.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"عضو تشكيلة الجماهير رغم موسم متقطع (12 غيابًا) — حين يلعب فهو نخبة"},w:{gp:"—",g:"—",a:"—",note:"سقط دون احتكاك بنصف النهائي"},p:{note:"🟠 مرجح غيابه مطلع الموسم"}},
+ {name:"ديكلان رايس",club:"أرسنال",pos:"MID",price:6.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"≈195",g:"≈8",a:"≈8",xg:"≈7",xa:"≈8",ex:"رابع الوسط 25/26 — أُخرج من تشكيلتنا لقانون الـ3 وإرهاق الصيف"},w:{gp:"—",g:"—",a:"—",note:"نصف نهائي إنجلترا + متابعات إصابة"},p:{note:"عودة متأخرة"}},
+ {name:"بوكايو ساكا",club:"أرسنال",pos:"MID",price:9.5,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"موسم دون المستوى بالتوثيق الرسمي — سعره مرشح للنزول"},w:{gp:"—",g:"—",a:"—",note:"مع إنجلترا لنصف النهائي"},p:{note:"عودة متأخرة"}},
+ {name:"إيبيريتشي إيزي",club:"أرسنال",pos:"MID",price:7.5,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"موسمه الأول بعد الانتقال من بالاس"},w:{gp:"—",g:"—",a:"—",note:"مع إنجلترا"},p:{note:"قيد التتبع"}},
+ {name:"هينكابيه 🆕",club:"أرسنال",pos:"DEF",price:5.5,isNew:1,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"تثبيت خيار الشراء — وبرشلونة تحوم"},w:{gp:"—",g:"—",a:"—",note:"مع الإكوادور"},p:{note:"غياب ساليبا قد يرفع دقائقه"}},
+ /* ---- ليفربول ---- */
+ {name:"كودي خاكبو",club:"ليفربول",pos:"MID",price:7.5,isNew:0,isCap:0,pen:"m",sq:1,s:{pts:"—",g:"<10",a:"≈5",xg:"≈9",xa:"≈5",ex:"⚠️ تصحيح تدقيقي: غيابه عن قائمة العشرة أهداف الموثقة يعني أقل من 10 — تقديري السابق ≈12 كان متفائلًا. تصاعده منذ يناير + مونديال قوي يبقيان حجته، لكن سوبوسلاي (7 صناعات + 4 ركلات حرة + راحة كاملة) صار ينافسه بالأدلة على الخانة"},w:{gp:4,g:3,a:1,note:"خروج هولندا بالركلات أمام المغرب"},p:{note:"يبدأ 25 يوليو × سندرلاند"}},
+ {name:"فان دايك",club:"ليفربول",pos:"DEF",price:6.0,isNew:0,isCap:0,pen:null,sq:1,s:{pts:175,g:"5+",a:"≈1",xg:"≈4",xa:"≈1",ex:"الوحيد الذي لعب كل دقيقة · مساهماته السبع كلها بين GW23–37 (زخم متأخر موثق) · 5 رأسيات · اختير بتشكيلة FPL الرسمية متقدمًا على سينيسي بفارق البونص فقط"},w:{gp:"—",g:"—",a:"—",note:"خروج ثمن النهائي بالركلات"},p:{note:"يبدأ 25 يوليو"}},
+ {name:"سوبوسلاي",club:"ليفربول",pos:"MID",price:6.5,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:"≈8",a:"≈7",xg:"≈7",xa:"≈7",ex:"7 صناعات (خامس الدوري مناصفة) + 4 أهداف كلها ركلات حرة مباشرة — أكمل موسم فردي في ليفربول المتعثر"},w:{gp:0,g:0,a:0,note:"المجر لم تتأهل = راحة كاملة"},p:{note:"مرشح رسميًا لدور متقدم مع إيراولا"}},
+ {name:"إيكيتيكيه",club:"ليفربول",pos:"FWD",price:8.0,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:11,a:"—",xg:"—",xa:"—",ex:"11 هدفًا رغم موسم ليفربول المتعثر — افتتحه بهدف وصناعة"},w:{gp:"—",g:"—",a:"—",note:"مع فرنسا"},p:{note:"عودة متأخرة"}},
+ {name:"فلوريان فيرتز",club:"ليفربول",pos:"MID",price:8.5,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"الصفقة القياسية 2025 — موسم أول متقلب مع الفريق"},w:{gp:"—",g:"—",a:"—",note:"خروج ألمانيا بثمن النهائي بالركلات"},p:{note:"إيراولا قد يعيد تعريف دوره"}},
+ {name:"ألكسندر إيزاك",club:"ليفربول",pos:"FWD",price:10.0,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"موسم دون المستوى بالتوثيق الرسمي بعد الصفقة القياسية"},w:{gp:"—",g:"—",a:"—",note:"مع السويد"},p:{note:"قيد التتبع"}},
+ {name:"فيكتور مونيوز 🆕",club:"ليفربول",pos:"MID",price:5.5,isNew:1,isCap:0,pen:null,sq:0,s:{pts:"—",g:7,a:5,xg:"≈6",xa:"≈4",ex:"أرقامه مع أوساسونا — عيّنة أسلوب إيراولا"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"أهم دقائق نراقبها من 25 يوليو"}},
+ {name:"جيريمي جاكيه 🆕",club:"ليفربول",pos:"DEF",price:4.5,isNew:1,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"من رين — مرشح لتعويض رحيل كوناتيه"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"راقب شراكته مع فان دايك"}},
+ /* ---- تشيلسي ---- */
+ {name:"كول بالمر",club:"تشيلسي",pos:"MID",price:9.5,isNew:0,isCap:0,pen:"y",sq:0,s:{pts:"—",g:"≈9",a:"≈7",xg:"≈11",xa:"≈8",ex:"موسم مخيب (5 بلنتيات فقط أنقذت أرقامه) وانهيار تشيلسي منذ مارس — سعره سينخفض ولا أوروبا = فرصة استرداد"},w:{gp:"—",g:"—",a:"—",note:"مع إنجلترا لنصف النهائي"},p:{note:"عودة متأخرة + مشروع ألونسو"}},
+ {name:"جواو بيدرو",club:"تشيلسي",pos:"FWD",price:7.5,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:15,a:"≈5",xg:"≈14",xa:"≈5",ex:"خامس الهدافين (15 كلها من داخل الصندوق، و23 بكل المسابقات) · هاتريك بمارس ثم انهيار جماعي لتشيلسي"},w:{gp:"—",g:"—",a:"—",note:"مع البرازيل"},p:{note:"جولة أستراليا من 28 يوليو"}},
+ {name:"إنزو فرنانديز",club:"تشيلسي",pos:"MID",price:6.5,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:"≈7",a:"≈8",xg:"≈5",xa:"≈8",ex:"39 نقطة بأول 6 جولات + ركلات ثابتة + لا أوروبا"},w:{gp:"—",g:"—",a:"—",note:"نهائي الغد مع الأرجنتين"},p:{note:"دخول مؤجل لـGW3–4"}},
+ {name:"ليفي كولويل",club:"تشيلسي",pos:"DEF",price:5.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"قلب أيسر رخيص — نظام ألونسو بثلاثة قلوب يرفع قيمته"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"من يحسم مركزه بالوديات يدخل المستكشف"}},
+ {name:"تريفو تشالوباه",club:"تشيلسي",pos:"DEF",price:5.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"قلب أيمن رخيص بنفس المنافسة"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"تحقق الوديات"}},
+ {name:"ريس جيمس 🏥",club:"تشيلسي",pos:"DEF",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"سجل انتكاسات متكرر"},w:{gp:"—",g:"—",a:"—",note:"انتكاسة بالمونديال"},p:{note:"🟡 شكوك دائمة"}},
+ {name:"إستيفاو 🏥",club:"تشيلسي",pos:"MID",price:6.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:0,g:0,a:0,note:"عضلة خلفية أخرجته من قائمة البرازيل"},p:{note:"🟠 غير محدد"}},
+ /* ---- توتنهام ---- */
+ {name:"سينيسي 🆕",club:"توتنهام",pos:"DEF",price:4.5,isNew:1,isCap:0,pen:null,sq:1,s:{pts:175,g:"≈2",a:6,xg:"≈2",xa:"≈4",ex:"ثالث المدافعين · 50 نقطة DEFCON (الأعلى) · خسر مقعد التشكيلة الرسمية أمام فان دايك بفارق البونص وحده — مستوى تشكيلة الموسم بسعر 4.5"},w:{gp:"—",g:"—",a:"—",note:"في نهائي الغد مع الأرجنتين!"},p:{note:"سيغيب عن معظمه"}},
+ {name:"فان هيكه 🆕",club:"توتنهام",pos:"DEF",price:4.8,isNew:1,isCap:0,pen:null,sq:1,s:{pts:"—",g:"≈2",a:"≈1",xg:"≈2",xa:"≈1",ex:"من خماسي تجاوز السعر الموثق · 52م = أساسي"},w:{gp:"—",g:"—",a:"—",note:"خروج هولندا المبكر = راحة"},p:{note:"وديات أستراليا من 26 يوليو"}},
+ {name:"توناللي 🆕",club:"توتنهام",pos:"MID",price:6.0,isNew:1,isCap:0,pen:"m",sq:0,s:{pts:"—",g:"≈7",a:"≈5",xg:"≈6",xa:"≈5",ex:"صفقة 100م£ — قلب مشروع دي زيربي"},w:{gp:0,g:0,a:0,note:"لم يظهر بالمونديال — راحة (حسم ملحق إيطاليا غير موثق عندي)"},p:{note:"راقب دوره بوديات أستراليا"}},
+ {name:"ماتيوس فرنانديز 🆕",club:"توتنهام",pos:"MID",price:6.0,isNew:1,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"صفقة 85م£ من وست هام الهابط"},w:{gp:"—",g:"—",a:"—",note:"مع البرتغال"},p:{note:"قيد الدمج"}},
+ {name:"كودوس",club:"توتنهام",pos:"MID",price:6.5,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"تصدّر سباق الصناعة مطلع 25/26 قبل تراجع الفريق"},w:{gp:"—",g:"—",a:"—",note:"مع غانا"},p:{note:"دي زيربي قد يحرره إبداعيًا"}},
+ {name:"سولانكي 🏥",club:"توتنهام",pos:"FWD",price:7.0,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"عاد من عضلة خلفية بنهاية الموسم (تصريح دي زيربي)"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"🟡 راقب جاهزيته"}},
+ {name:"ماديسون 🏥",club:"توتنهام",pos:"MID",price:6.5,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"عائد من قطع بالصليبي — دقائق محدودة بنهاية الموسم"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"🟡 بناء تدريجي"}},
+ /* ---- بقية الكبار والمتوسطون ---- */
+ {name:"جاوين 🆕",club:"نيوكاسل",pos:"GK",price:4.5,isNew:1,isCap:0,pen:null,sq:0,s:{pts:"—",g:0,a:0,xg:"—",xa:"—",ex:"من رانس قبل المونديال — صفقتهم الوحيدة حتى الآن"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"من يحرس عرين نيوكاسل؟ تحقق الخميس"}},
+ {name:"ثياو",club:"نيوكاسل",pos:"DEF",price:5.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"من ترشيحات نهاية الموسم المنتظمة"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"جدول هجومي مغرٍ من GW3 — بانتظار صفقاتهم"}},
+ {name:"مورغان روجرز",club:"أستون فيلا",pos:"MID",price:7.0,isNew:0,isCap:0,pen:null,sq:1,s:{pts:"—",g:10,a:"≈9",xg:"≈9",xa:"≈8",ex:"10 أهداف + انفجار موثق بسعر متواضع · ⚠️ فيلا بدوري الأبطال = دوران محتمل"},w:{gp:0,g:0,a:0,note:"لم يُستدع = راحة كاملة"},p:{note:"يبدأ 21 يوليو × والسول — أول قراءة الخميس"}},
+ {name:"أولي واتكينز",club:"أستون فيلا",pos:"FWD",price:8.0,isNew:0,isCap:1,pen:null,sq:0,s:{pts:"—",g:16,a:"—",xg:"—",xa:"—",ex:"رابع الهدافين — 8 أهداف بآخر 8 مباريات (وحش زخم بمنطق نموذجنا!) وكل أهدافه الـ16 دون بلنتيات · قاد فيلا للمركز الرابع ولقب الدوري الأوروبي"},w:{gp:"—",g:"—",a:"—",note:"مع إنجلترا لنصف النهائي"},p:{note:"عودة متأخرة + ⚠️ فيلا بدوري الأبطال = ضغط جدول جديد"}},
+ {name:"تاركوفسكي",club:"إيفرتون",pos:"DEF",price:5.4,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"≈2",a:"≈1",xg:"≈2",xa:"≈0",ex:"مرجع DEFCON: نسبة 63.6% وما يعادل 11 شباكًا إضافية (محاكاة رسمية على أرقام 24/25)"},w:{gp:0,g:0,a:0,note:"لم يُستدع = راحة كاملة"},p:{note:"إيفرتون تبدأ مبكرًا (بالاس بأرضهم GW1)"}},
+ {name:"غارنر",club:"إيفرتون",pos:"MID",price:5.0,isNew:0,isCap:0,pen:null,sq:1,s:{pts:"—",g:"—",a:7,xg:"≈2",xa:"≈6",ex:"مفاجأة التوثيق: 7 صناعات = خامس صنّاع الدوري مناصفةً (مع سوبوسلاي وصلاح وويلسون)! نال أول قميص لإنجلترا بفضل موسمه — في تشكيلتنا ✓"},w:{gp:"—",g:"—",a:"—",note:"أول استدعاء لإنجلترا هذا الموسم — حضوره المونديالي غير موثق عندي"},p:{note:"بالاس بأرضهم GW1"}},
+ {name:"غريليش",club:"إيفرتون",pos:"MID",price:6.5,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"تصدّر سباق الصناعة مطلع 25/26 معارًا — ما صيغة بقائه؟"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"تحقق وضعه التعاقدي الخميس"}},
+ {name:"بيكفورد",club:"إيفرتون",pos:"GK",price:5.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:0,a:0,xg:"—",xa:"—",ex:"أساسي مضمون + نقاط تصديات تقليدية"},w:{gp:"—",g:"—",a:"—",note:"حارس إنجلترا لنصف النهائي"},p:{note:"عودة متأخرة"}},
+ {name:"غيهي",club:"كريستال بالاس",pos:"DEF",price:5.2,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"≈3",a:"≈2",xg:"≈2",xa:"≈1",ex:"بطل قيمة موثق + مشوار نهائي المؤتمر — بديل تيمبر الأول"},w:{gp:"—",g:"—",a:"—",note:"أساسي إنجلترا لنصف النهائي"},p:{note:"عودة متأخرة + مدرب جديد (ساج)"}},
+ {name:"ريتشاردز",club:"كريستال بالاس",pos:"DEF",price:4.8,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"تعافى من أربطة الكاحل (مايو) ولحق بالمونديال"},w:{gp:"—",g:"—",a:"—",note:"مع أمريكا المضيفة (نتيجتها غير موثقة عندي)"},p:{note:"قيد التتبع"}},
+ {name:"لاكروا",club:"كريستال بالاس",pos:"DEF",price:4.8,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"دخل بدائل فرنسا بالمونديال — دفاع بالاس من أفضل الوحدات سعرًا"},w:{gp:"—",g:"—",a:"—",note:"بديل فرنسا"},p:{note:"قيد التتبع"}},
+ {name:"غيبس-وايت",club:"نوتنغهام فورست",pos:"MID",price:7.5,isNew:0,isCap:1,pen:"m",sq:0,s:{pts:"≈195",g:15,a:"—",xg:"—",xa:"—",ex:"قصة نصفين موثقة رسميًا: 64 نقطة فقط حتى منتصف الموسم (المركز 37) ثم 124 نقطة من GW20–38 — الثاني خلف برونو حصريًا! 12 هدفًا بالنصف الثاني: تعريف الزخم في نموذجنا"},w:{gp:0,g:0,a:0,note:"استُبعد من قائمة إنجلترا رغم 15 هدفًا = راحة كاملة وغضب محفّز"},p:{note:"نظام غلاسنر الجديد قد يحرره أكثر"}},
+ {name:"موريو",club:"نوتنغهام فورست",pos:"DEF",price:5.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"≈1",a:"≈1",xg:"≈1",xa:"≈1",ex:"38 تدخلًا مؤهلًا — ضعف ميلينكوفيتش"},w:{gp:"—",g:"—",a:"—",note:"مع البرازيل"},p:{note:"غلاسنر بثلاثة قلوب = دقائق أأمن"}},
+ {name:"ميلينكوفيتش",club:"نوتنغهام فورست",pos:"DEF",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"≈5",a:"—",xg:"≈4",xa:"—",ex:"تهديد رأسي بالركنيات + مستفيد DEFCON تاريخي (+34 نقطة معاد حسابها)"},w:{gp:0,g:0,a:0,note:"صربيا لم تتأهل = راحة"},p:{note:"قيد التتبع"}},
+ {name:"إيغور ثياغو",club:"برينتفورد",pos:"FWD",price:7.0,isNew:0,isCap:1,pen:"y",sq:1,s:{pts:"≈190",g:22,a:"≈3",xg:"≈19",xa:"≈3",ex:"وصيف الهدافين (8 منها بلنتيات — أكثر منفذي الدوري تهديفًا من النقطة!) · 7 أهداف حاسمة · لاعب شهر نوفمبر"},w:{gp:"—",g:"—",a:"—",note:"خروج مبكر نسبيًا = راحة"},p:{note:"قيد التتبع"}},
+ {name:"كيليهر",club:"برينتفورد",pos:"GK",price:5.0,isNew:0,isCap:0,pen:null,sq:1,s:{pts:"—",g:0,a:0,xg:"—",xa:"—",ex:"5 شباك + 5 نقاط تصديات + 6 بونص منذ يناير · صدّ بلنتي"},w:{gp:0,g:0,a:0,note:"لم يشارك بالمونديال = راحة (وضع أيرلندا بالملحق غير موثق عندي)"},p:{note:"قيد التتبع"}},
+ {name:"فان دن بيرغ",club:"برينتفورد",pos:"DEF",price:4.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"أقصى نقاط دفاعية بكل مباراة في بدايات 25/26"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"قيد التتبع"}},
+ {name:"لو فيه",club:"سندرلاند",pos:"MID",price:5.0,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"منفذ بلنتيات سندرلاند الموثق — صاحب البانينكا التي صدها كيليهر بيناير (تصحيح v4.4: كان منسوبًا خطأً لبرينتفورد)"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"ركلات مضمونة إن استمر أساسيًا"}},
+ {name:"هندرسون 🏥",club:"برينتفورد",pos:"MID",price:5.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"كسر غريب بالذراع قبيل المونديال"},p:{note:"🟡 حسب الالتئام"}},
+ {name:"تروفير",club:"بورنموث",pos:"DEF",price:4.8,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"قيمة موثقة 25/26 — لكن الجدول الأقسى بالدوري"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"ممنوع قبل GW7"}},
+ {name:"واتارا",club:"بورنموث",pos:"MID",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"من ترشيحات نهاية الموسم — روز مدرب هجومي لكن الجدول قاتل"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"ممنوع قبل GW7"}},
+ {name:"ي. أندرسن",club:"فولهام",pos:"DEF",price:4.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"من الأربعة الذين تجاوزوا نسبة تاركوفسكي الدفاعية — قاع السوق"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"مدرسة أربيلوا الدفاعية"}},
+ {name:"فيفر",club:"برايتون",pos:"MID",price:4.9,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"ثغرة التصنيف: وسط يلعب ظهيرًا — تفوق على نسبة تاركوفسكي"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"استقرار هورتسلر النادر"}},
+ {name:"رويفس",club:"سندرلاند",pos:"GK",price:4.8,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:0,a:0,xg:"—",xa:"—",ex:"أسطورة أول 6 جولات (39 نقطة كأفضل حارس)"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"قيد التتبع"}},
+ {name:"ألديريتي",club:"سندرلاند",pos:"DEF",price:4.3,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"39 نقطة بأول 6 جولات بسعر 4.0 — نموذج الحشو المثالي"},w:{gp:"—",g:"—",a:"—",note:"مع باراغواي (مشاركتها غير موثقة عندي)"},p:{note:"قيد التتبع"}},
+ {name:"كالوم ويلسون",club:"انتقال حر",pos:"FWD",price:5.5,isNew:1,isCap:0,pen:"m",sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"ممكّن موثق غادر وست هام الهابط مجانًا"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"وجهته تتحقق الخميس"}},
+ {name:"جارود بووين",club:"بلا نادٍ",pos:"FWD",price:0,isNew:0,isCap:0,pen:"y",sq:0,s:{pts:"≈200",g:9,a:11,xg:"≈10",xa:"≈9",ex:"9 أهداف + 11 صناعة — فعل كل شيء لإنقاذ وست هام ولم يكفِ: أشهى صيد متاح بالسوق"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"🔵 أهم ملف انتقالات نراقبه"}},
+ {name:"محمد صلاح 🏥",club:"بلا نادٍ",pos:"MID",price:0,isNew:0,isCap:0,pen:"y",sq:0,s:{pts:"—",g:"—",a:7,xg:"—",xa:"—",ex:"موسم أخير هابط — لكنه ختم بصناعته السابعة (خامس الدوري مناصفة) بيوم الوداع"},w:{gp:"—",g:"—",a:"—",note:"شد خلفية أمام إيران (خرج د57)"},p:{note:"🔵 وجهة مجهولة — دخول فوري إن وقّع لمنافس"}},
+ /* ---- إضافات v4.4: تعميق الأندية ---- */
+ {name:"فيل فودن",club:"مان سيتي",pos:"MID",price:9.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"سيرة متأرجحة موسمًا بموسم — ماريسكا قد يعيده مركزيًا"},w:{gp:"—",g:"—",a:"—",note:"مع إنجلترا"},p:{note:"عودة متأخرة"}},
+ {name:"عمر مرموش",club:"مان سيتي",pos:"FWD",price:8.0,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"شريك/بديل هالاند"},w:{gp:"—",g:"—",a:"—",note:"مع مصر (خرجت وصلاح مصاب)"},p:{note:"قيد التتبع"}},
+ {name:"راينديرس",club:"مان سيتي",pos:"MID",price:6.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"غياب رودري يرفع أهميته مع أندرسون"},w:{gp:"—",g:"—",a:"—",note:"خروج هولندا المبكر"},p:{note:"قيد التتبع"}},
+ {name:"جيريمي دوكو",club:"مان سيتي",pos:"MID",price:7.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"مع بلجيكا"},p:{note:"قيد التتبع"}},
+ {name:"روبن دياس",club:"مان سيتي",pos:"DEF",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"مع البرتغال"},p:{note:"قيد التتبع"}},
+ {name:"نيكو أورايلي",club:"مان سيتي",pos:"DEF",price:4.8,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"🏆 لاعب الموسم الشاب الرسمي + عضو تشكيلة الجماهير — أكبر غائب سابق عن قاعدتنا"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"راقب دقائقه مع ماريسكا"}},
+ {name:"مارتن أوديغارد",club:"أرسنال",pos:"MID",price:8.0,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"قائد البطل"},w:{gp:"—",g:"—",a:"—",note:"مع النرويج حتى ربع النهائي"},p:{note:"قيد التتبع"}},
+ {name:"زوبيميندي",club:"أرسنال",pos:"MID",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"مرشح DEFCON طبيعي بوسط البطل"},w:{gp:"—",g:"—",a:"—",note:"مع إسبانيا — نهائي الغد!"},p:{note:"عودة متأخرة جدًا"}},
+ {name:"مارتينيلي",club:"أرسنال",pos:"MID",price:7.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"مع البرازيل"},p:{note:"قيد التتبع"}},
+ {name:"كالافيوري",club:"أرسنال",pos:"DEF",price:5.8,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"شكوك تيمبر وساليبا ترفع دقائق كل البدلاء"},w:{gp:0,g:0,a:0,note:"لم يظهر بالمونديال — راحة (ملحق إيطاليا غير موثق عندي)"},p:{note:"قيد التتبع"}},
+ {name:"بن وايت",club:"أرسنال",pos:"DEF",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"قيد التتبع"}},
+ {name:"تروسار",club:"أرسنال",pos:"MID",price:6.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:2,a:"—",note:"هدفان مونديالان مع بلجيكا"},p:{note:"قيد التتبع"}},
+ {name:"ميرينو",club:"أرسنال",pos:"MID",price:6.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"مع إسبانيا — نهائي الغد"},p:{note:"عودة متأخرة"}},
+ {name:"ميسلييه 🆕",club:"أرسنال",pos:"GK",price:4.5,isNew:1,isCap:0,pen:null,sq:0,s:{pts:"—",g:0,a:0,xg:"—",xa:"—",ex:"من ليدز — حارس ثانٍ خلف رايا (تحقق الدور)"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"قيد التتبع"}},
+ {name:"بيدرو بورو",club:"توتنهام",pos:"DEF",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"🔥 زخم موثق: من ترشيحات الجولة الأخيرة الرسمية (أنهى الموسم بمستوى استحق الاختيار) — وأشمل تهديد هجومي بين مدافعي توتنهام"},w:{gp:"—",g:"—",a:"—",note:"أساسي إسبانيا حتى نهائي الغد — أعمق مشوار ممكن"},p:{note:"عودة متأخرة جدًا + أفضلية على الجدد إن أثبتت الوديات لياقته"}},
+ {name:"روميرو",club:"توتنهام",pos:"DEF",price:5.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"تهديد رأسي موثق بالركنيات (5 أهداف بموسم سابق) — قائد دفاع نجا بتوتنهام بالجولة الأخيرة"},w:{gp:"—",g:"—",a:"—",note:"أساسي الأرجنتين حتى نهائي الغد — سيعود متأخرًا ومرهقًا لكن بثقة بطل محتمل"},p:{note:"عودة متأخرة — ومنافسة سينيسي/فان هيكه تتقاطع معه"}},
+ {name:"فيكاريو",club:"توتنهام",pos:"GK",price:5.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:0,a:0,xg:"—",xa:"—",ex:"وصول دوبرافكا يفتح ملف الحراسة"},w:{gp:0,g:0,a:0,note:"لم يظهر بالمونديال — راحة (ملحق إيطاليا غير موثق عندي)"},p:{note:"من الأساسي؟ تحقق بوديات أستراليا"}},
+ {name:"باليينيا",club:"توتنهام",pos:"MID",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"آلة DEFCON محتملة — لكن توناللي وفرنانديز يزاحمانه"},w:{gp:"—",g:"—",a:"—",note:"مع البرتغال"},p:{note:"قيد التتبع"}},
+ {name:"بريناند جونسون",club:"توتنهام",pos:"MID",price:6.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"— (مشاركة ويلز غير موثقة عندي)"},p:{note:"قيد التتبع"}},
+ {name:"ماك أليستر",club:"ليفربول",pos:"MID",price:6.5,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"مع الأرجنتين — نهائي الغد!"},p:{note:"عودة متأخرة جدًا"}},
+ {name:"برادلي",club:"ليفربول",pos:"DEF",price:5.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"ضغط إيراولا يناسب ظهيرًا بمحركه"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"قيد التتبع"}},
+ {name:"كيركيز",club:"ليفربول",pos:"DEF",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"رحيل روبرتسون يثبته يسارًا"},w:{gp:0,g:0,a:0,note:"المجر لم تتأهل = راحة"},p:{note:"قيد التتبع"}},
+ {name:"فريمبونغ",club:"ليفربول",pos:"DEF",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"سرعة تناسب انتقالات إيراولا"},w:{gp:"—",g:"—",a:"—",note:"خروج هولندا المبكر"},p:{note:"قيد التتبع"}},
+ {name:"كايسيدو",club:"تشيلسي",pos:"MID",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"مرشح DEFCON نخبوي"},w:{gp:"—",g:"—",a:"—",note:"مع الإكوادور"},p:{note:"قيد التتبع"}},
+ {name:"نيتو",club:"تشيلسي",pos:"MID",price:6.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"جناح ألونسو المرتد المحتمل"},w:{gp:"—",g:"—",a:"—",note:"مع البرتغال"},p:{note:"قيد التتبع"}},
+ {name:"غيتنس",club:"تشيلسي",pos:"MID",price:6.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"قيد التتبع"}},
+ {name:"روبرت سانشيز",club:"تشيلسي",pos:"GK",price:4.8,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:0,a:0,xg:"—",xa:"—",ex:"لا أوروبا = جدول حراسة مستقر"},w:{gp:"—",g:"—",a:"—",note:"مع إسبانيا احتياطًا"},p:{note:"قيد التتبع"}},
+ {name:"فوفانا",club:"تشيلسي",pos:"DEF",price:4.8,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"نظام 3 قلوب عند ألونسو يوسع الخيارات"},w:{gp:"—",g:"—",a:"—",note:"مع فرنسا"},p:{note:"قيد التتبع"}},
+ {name:"ديلاب",club:"تشيلسي",pos:"FWD",price:6.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"منافس جواو بيدرو رأسيًا"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"قيد التتبع"}},
+ {name:"أماد ديالو",club:"مان يونايتد",pos:"MID",price:6.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"جناح كاريك الأيمن — يستفيد من الجدول الذهبي"},w:{gp:"—",g:"—",a:"—",note:"مع كوت ديفوار"},p:{note:"قيد التتبع"}},
+ {name:"ماونت",club:"مان يونايتد",pos:"MID",price:6.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"قيد التتبع"}},
+ {name:"يورو",club:"مان يونايتد",pos:"DEF",price:5.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"غياب دي ليخت يثبته"},w:{gp:"—",g:"—",a:"—",note:"مع فرنسا"},p:{note:"عودة متأخرة"}},
+ {name:"مزراوي",club:"مان يونايتد",pos:"DEF",price:5.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"مع المغرب (أسقطت هولندا!)"},p:{note:"عودة متأخرة محتملة"}},
+ {name:"لامنس",club:"مان يونايتد",pos:"GK",price:4.8,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:0,a:0,xg:"—",xa:"—",ex:"ملف حراسة يونايتد يُتحقق"},w:{gp:"—",g:"—",a:"—",note:"مع بلجيكا"},p:{note:"من الأساسي؟ تحقق"}},
+ {name:"برونو غيماريش",club:"نيوكاسل",pos:"MID",price:6.5,isNew:0,isCap:1,pen:"m",sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"قلب الفريق بعد رحيل توناللي — مرشح تحرر هجومي + جدول هجومي مغرٍ من GW3"},w:{gp:"—",g:"—",a:"—",note:"مع البرازيل"},p:{note:"قيد التتبع"}},
+ {name:"ويسا",club:"نيوكاسل",pos:"FWD",price:7.0,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"رأس الحربة بعد موجة الرحيل"},w:{gp:"—",g:"—",a:"—",note:"مع الكونغو الديمقراطية (أقصت نيجيريا!)"},p:{note:"قيد التتبع"}},
+ {name:"فولتيماده",club:"نيوكاسل",pos:"FWD",price:6.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"خروج ألمانيا بثمن النهائي بالركلات"},p:{note:"قيد التتبع"}},
+ {name:"هارفي بارنز",club:"نيوكاسل",pos:"MID",price:6.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"رحيل غوردون يفتح الجناح الأيسر كاملًا له"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"مرشح أول لملء فراغ غوردون — تحقق"}},
+ {name:"سفين بوتمان",club:"نيوكاسل",pos:"DEF",price:5.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"قلب هاو الأيسر — من ترشيحات الجولة الأخيرة الرسمية (أنهى الموسم قويًا)"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"قيد التتبع"}},
+ {name:"دان بيرن",club:"نيوكاسل",pos:"DEF",price:4.8,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"تهديد رأسي بالركنيات"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"قيد التتبع"}},
+ {name:"بوب",club:"نيوكاسل",pos:"GK",price:5.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:0,a:0,xg:"—",xa:"—",ex:"وصول جاوين يفتح منافسة العرين"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"من الأساسي؟ تحقق الخميس"}},
+ {name:"إيمي مارتينيز",club:"أستون فيلا",pos:"GK",price:5.2,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:0,a:0,xg:"—",xa:"—",ex:"بطل بلنتيات تاريخي"},w:{gp:"—",g:"—",a:"—",note:"مع الأرجنتين — نهائي الغد!"},p:{note:"عودة متأخرة جدًا"}},
+ {name:"باو توريس",club:"أستون فيلا",pos:"DEF",price:5.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"مع إسبانيا"},p:{note:"عودة متأخرة"}},
+ {name:"ماكغين",club:"أستون فيلا",pos:"MID",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"4 أهداف من خارج الصندوق (الأعلى مناصفة) — قنّاص المدى البعيد"},w:{gp:"—",g:"—",a:"—",note:"مع اسكتلندا (مشاركتها غير موثقة عندي)"},p:{note:"قيد التتبع"}},
+ {name:"برانثويت",club:"إيفرتون",pos:"DEF",price:5.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"شريك تاركوفسكي — وحدة مويس الدفاعية كاملة رخيصة"},w:{gp:"—",g:"—",a:"—",note:"مع إنجلترا"},p:{note:"عودة متأخرة"}},
+ {name:"نديايي",club:"إيفرتون",pos:"MID",price:6.0,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"أكثر لاعبي إيفرتون اختيارًا تاريخيًا بالفانتزي"},w:{gp:"—",g:"—",a:"—",note:"مع السنغال"},p:{note:"قيد التتبع"}},
+ {name:"ماكنيل",club:"إيفرتون",pos:"MID",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"تفاضلي موثق من ترشيحات سابقة"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"قيد التتبع"}},
+ {name:"بيتو",club:"إيفرتون",pos:"FWD",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"قيد التتبع"}},
+ {name:"ماتيتا",club:"كريستال بالاس",pos:"FWD",price:7.0,isNew:0,isCap:0,pen:"y",sq:0,s:{pts:"—",g:12,a:"—",xg:"—",xa:"—",ex:"12 هدفًا (4 بلنتيات موثقة + 5 رأسيات) — منفذ بالاس الأول، تحقق استمراره مع ساج"},w:{gp:"—",g:"—",a:"—",note:"مع فرنسا"},p:{note:"عودة متأخرة"}},
+ {name:"إسماعيلا سار",club:"كريستال بالاس",pos:"MID",price:6.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:4,a:"—",note:"🔥 4 أهداف مونديالية (سادس الهدافين مناصفة مع فينيسيوس وديمبيلي!) بمشوار سنغالي لافت"},p:{note:"قيد التتبع"}},
+ {name:"دين هندرسون",club:"كريستال بالاس",pos:"GK",price:4.8,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:0,a:0,xg:"—",xa:"—",ex:"48 نقطة في 2026 وحده (توثيق) — دفاع بالاس من أفضل الوحدات"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"قيد التتبع"}},
+ {name:"دانيال مونيوز",club:"كريستال بالاس",pos:"DEF",price:5.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"ظهير هجومي — لا تخلط بينه وبين فيكتور مونيوز (ليفربول)"},w:{gp:"—",g:"—",a:"—",note:"مع كولومبيا"},p:{note:"قيد التتبع"}},
+ {name:"وارتون",club:"كريستال بالاس",pos:"MID",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"مع إنجلترا"},p:{note:"عودة متأخرة"}},
+ {name:"بينو 🏥",club:"كريستال بالاس",pos:"MID",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"التواء أخرمي ترقوي أمام أوروغواي — لم يلعب منذها"},p:{note:"🟡 راقب تعافيه"}},
+ {name:"كريس وود",club:"نوتنغهام فورست",pos:"FWD",price:7.0,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"هداف فورست المزمن"},w:{gp:"—",g:"—",a:"—",note:"مع نيوزيلندا (مشاركتها غير موثقة عندي)"},p:{note:"قيد التتبع"}},
+ {name:"سيلس",club:"نوتنغهام فورست",pos:"GK",price:5.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:0,a:0,xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"مع بلجيكا"},p:{note:"قيد التتبع"}},
+ {name:"دامسغارد",club:"برينتفورد",pos:"MID",price:5.5,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"صانع برينتفورد وركلاته الثابتة"},w:{gp:"—",g:"—",a:"—",note:"مع الدنمارك"},p:{note:"قيد التتبع"}},
+ {name:"شاده",club:"برينتفورد",pos:"MID",price:6.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"خروج ألمانيا بثمن النهائي"},p:{note:"قيد التتبع"}},
+ {name:"ميتوما 🏥",club:"برايتون",pos:"MID",price:6.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:0,g:0,a:0,note:"غاب عن المونديال مصابًا (ضمن غيابات اليابان)"},p:{note:"🟡 راقب تعافيه"}},
+ {name:"مينتيه",club:"برايتون",pos:"MID",price:6.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"مع غامبيا"},p:{note:"قيد التتبع"}},
+ {name:"فيربروخن",club:"برايتون",pos:"GK",price:4.8,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:0,a:0,xg:"—",xa:"—",ex:"نقاط تصديات تقليدية"},w:{gp:"—",g:"—",a:"—",note:"خروج هولندا المبكر"},p:{note:"قيد التتبع"}},
+ {name:"روتر",club:"برايتون",pos:"FWD",price:6.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"قيد التتبع"}},
+ {name:"ويلبيك",club:"برايتون",pos:"FWD",price:6.0,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:13,a:"—",xg:"—",xa:"—",ex:"13 هدفًا بعمر الـ35! ختمها بثنائية بليفربول وهدف بتشيلسي"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"قيد التتبع"}},
+ {name:"كلويفرت",club:"بورنموث",pos:"MID",price:6.5,isNew:0,isCap:0,pen:"y",sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"منفذ بلنتيات بورنموث — لكن الجدول الأقسى بالدوري"},w:{gp:"—",g:"—",a:"—",note:"خروج هولندا المبكر"},p:{note:"ممنوع قبل GW7 رغم الركلات"}},
+ {name:"إيفانيلسون",club:"بورنموث",pos:"FWD",price:6.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"مع البرازيل"},p:{note:"ممنوع قبل GW7"}},
+ {name:"بيتروفيتش",club:"بورنموث",pos:"GK",price:4.8,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:0,a:0,xg:"—",xa:"—",ex:"تصديات كثيرة متوقعة بالجدول القاسي — سيف ذو حدين"},w:{gp:0,g:0,a:0,note:"صربيا لم تتأهل = راحة"},p:{note:"قيد التتبع"}},
+ {name:"لينو",club:"فولهام",pos:"GK",price:4.8,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:0,a:0,xg:"—",xa:"—",ex:"ملك نقاط التصديات المزمن"},w:{gp:"—",g:"—",a:"—",note:"خروج ألمانيا بثمن النهائي"},p:{note:"قيد التتبع"}},
+ {name:"إيووبي",club:"فولهام",pos:"MID",price:6.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:0,g:0,a:0,note:"نيجيريا لم تتأهل = راحة"},p:{note:"قيد التتبع"}},
+ {name:"مونيز",club:"فولهام",pos:"FWD",price:6.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"قيد التتبع"}},
+ {name:"راؤول خيمينيز",club:"فولهام",pos:"FWD",price:6.0,isNew:0,isCap:0,pen:"y",sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"4 بلنتيات موثقة — منفذ فولهام الأول"},w:{gp:"—",g:"—",a:"—",note:"سجّل للمضيف المكسيكي بالمونديال"},p:{note:"عودة متأخرة محتملة"}},
+ {name:"سميث رو",club:"فولهام",pos:"MID",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"قيد التتبع"}},
+ {name:"جاكا",club:"سندرلاند",pos:"MID",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"قائد بقائهم — DEFCON محتمل"},w:{gp:"—",g:"—",a:"—",note:"مع سويسرا"},p:{note:"قيد التتبع"}},
+ {name:"بالارد",club:"سندرلاند",pos:"DEF",price:4.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"من وحدة البقاء الدفاعية"},w:{gp:"—",g:"—",a:"—",note:"مع أيرلندا الشمالية (لعبت فرنسا وديًا)"},p:{note:"قيد التتبع"}},
+ {name:"مايندا",club:"سندرلاند",pos:"FWD",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"—"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"قيد التتبع"}},
+ {name:"رودون",club:"ليدز",pos:"DEF",price:4.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"من وحدة بقاء فاركه"},w:{gp:"—",g:"—",a:"—",note:"— (مشاركة ويلز غير موثقة عندي)"},p:{note:"قيد التتبع"}},
+ {name:"📁 ملف ليدز الهجومي (يُفصّل لاحقًا)",club:"ليدز",pos:"MID",price:5.0,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"تُفتح ملفاتهم فرديًا بعد الوديات"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"تحقق الخميس"}},
+ {name:"📁 ملف هال سيتي (يُفصّل لاحقًا)",club:"هال",pos:"MID",price:4.5,isNew:1,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"صعدوا عبر الملحق ببطولات ماكبورني وماكغري"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"GW1: يستضيفون يونايتد — عيّنة فورية"}},
+ {name:"📁 ملف إيبسويتش (يُفصّل لاحقًا)",club:"إيبسويتش",pos:"MID",price:4.5,isNew:1,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"عادوا فورًا — أكثر الصاعدين خبرة حديثة بالدوري"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"GW1 ضد سندرلاند"}},
+ {name:"📁 ملف كوفنتري (يُفصّل لاحقًا)",club:"كوفنتري",pos:"MID",price:4.5,isNew:1,isCap:0,pen:null,sq:0,s:{pts:"—",g:"—",a:"—",xg:"—",xa:"—",ex:"بطل التشامبيونشيب — أول ظهور منذ 25 سنة"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"GW1: ضيوف البطل بالافتتاح — الجدول الأقسى بين الصاعدين"}},
+ {name:"فيكتور يوكيريس",club:"أرسنال",pos:"FWD",price:9.0,isNew:0,isCap:1,pen:"m",sq:0,s:{pts:"—",g:14,a:"—",xg:"—",xa:"—",ex:"سابع الهدافين — 10 من أهدافه الـ14 منذ 20 ديسمبر: أعنف زخم تصاعدي بين المهاجمين! مهاجم البطل"},w:{gp:"—",g:"—",a:"—",note:"مع السويد"},p:{note:"إن خرج تيمبر المصاب تنفتح خانة أرسنالية له — سيناريو v5 محتمل"}},
+ {name:"كالفرت-لوين",club:"ليدز",pos:"FWD",price:6.0,isNew:0,isCap:0,pen:"y",sq:0,s:{pts:"—",g:14,a:"—",xg:"—",xa:"—",ex:"14 هدفًا (4 بلنتيات موثقة) — مفاجأة ليدز الباقي بجدارة"},w:{gp:"—",g:"—",a:"—",note:"مع إنجلترا"},p:{note:"عودة متأخرة"}},
+ {name:"ريتشارليسون",club:"توتنهام",pos:"FWD",price:6.5,isNew:0,isCap:0,pen:"m",sq:0,s:{pts:"—",g:11,a:"—",xg:"—",xa:"—",ex:"11 هدفًا رغم فوضى توتنهام + من ترشيحات الجولة الأخيرة الرسمية — متقدم على سولانكي حاليًا"},w:{gp:"—",g:"—",a:"—",note:"مع البرازيل"},p:{note:"وديات أستراليا تكشف مهاجم دي زيربي الأول"}},
+ {name:"هاري ويلسون",club:"فولهام",pos:"MID",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:10,a:"—",xg:"—",xa:"—",ex:"10 أهداف (6 حاسمة — الثالث بعد هالاند وثياغو) + 7 صناعات (خامس الدوري مناصفة): 17 مساهمة بسعر 5.5 — من أخفى صفقات السوق"},w:{gp:"—",g:"—",a:"—",note:"— (مشاركة ويلز غير موثقة عندي)"},p:{note:"قيد التتبع"}},
+ {name:"كروبي",club:"بورنموث",pos:"FWD",price:5.5,isNew:0,isCap:0,pen:null,sq:0,s:{pts:"—",g:13,a:"—",xg:"—",xa:"—",ex:"13 هدفًا كموهبة صاعدة — لكن الجدول الأقسى بالدوري يؤجله"},w:{gp:"—",g:"—",a:"—",note:"—"},p:{note:"ممنوع قبل GW7 كبقية بورنموث"}}
+];
+
+var st={view:"s",pos:"ALL",fNew:0,fCap:0,fPen:0,fSq:0,sort:"pts",dir:-1};
+function setView(b){document.querySelectorAll('.vtab').forEach(function(x){x.classList.remove('on')});b.classList.add('on');st.view=b.getAttribute('data-v');renderDb()}
+function setPos(b){document.querySelectorAll('.fbtn[data-pos]').forEach(function(x){x.classList.remove('on')});b.classList.add('on');st.pos=b.getAttribute('data-pos');renderDb()}
+function tg(b,k){st[k]=st[k]?0:1;b.classList.toggle('on');renderDb()}
+function setSort(k){if(st.sort===k){st.dir*=-1}else{st.sort=k;st.dir=-1}renderDb()}
+function num(v){if(typeof v==="number")return v;var m=String(v).match(/[\d.]+/);return m?parseFloat(m[0]):-1}
+function tags(p){var h="";if(p.isNew)h+='<span class="tag new">جديد</span>';if(p.isCap)h+='<span class="tag cap">كابتن</span>';if(p.pen==="y")h+='<span class="tag pen">بلنتي ✓</span>';if(p.pen==="m")h+='<span class="tag pen">بلنتي؟</span>';return h}
+function renderDb(){
+  var q=(document.getElementById('q').value||"").trim();
+  var club=document.getElementById('clubSel').value;
+  var rows=P.filter(function(p){
+    if(st.pos!=="ALL"&&p.pos!==st.pos)return false;
+    if(club!=="ALL"&&p.club!==club)return false;
+    if(st.fNew&&!p.isNew)return false;
+    if(st.fCap&&!p.isCap)return false;
+    if(st.fPen&&!p.pen)return false;
+    if(st.fSq&&!p.sq)return false;
+    if(q&&p.name.indexOf(q)<0&&p.club.indexOf(q)<0)return false;
+    return true;
+  });
+  var th,body="";
+  if(st.view==="s"){
+    th='<tr><th>اللاعب</th><th>النادي</th><th>المركز</th><th onclick="setSort(\'price\')">سعر <span class="arr">'+(st.sort==='price'?(st.dir<0?'▼':'▲'):'')+'</span></th>'
+      +'<th onclick="setSort(\'pts\')">نقاط <span class="arr">'+(st.sort==='pts'?(st.dir<0?'▼':'▲'):'')+'</span></th>'
+      +'<th onclick="setSort(\'g\')">أهداف <span class="arr">'+(st.sort==='g'?(st.dir<0?'▼':'▲'):'')+'</span></th>'
+      +'<th onclick="setSort(\'a\')">صناعة <span class="arr">'+(st.sort==='a'?(st.dir<0?'▼':'▲'):'')+'</span></th>'
+      +'<th>xG≈</th><th>xA≈</th><th>مميزات موثقة</th></tr>';
+    rows.sort(function(a,b){var k=st.sort,va,vb;if(k==="price"){va=a.price;vb=b.price}else{va=num(a.s[k]);vb=num(b.s[k])}return(va-vb)*st.dir});
+    rows.forEach(function(p){body+='<tr><td class="pname">'+p.name+tags(p)+'</td><td>'+p.club+'</td><td><span class="pos-b pos-'+p.pos+'">'+p.pos+'</span></td><td><b>'+p.price.toFixed(1)+'</b></td><td><b>'+p.s.pts+'</b></td><td>'+p.s.g+'</td><td>'+p.s.a+'</td><td>'+p.s.xg+'</td><td>'+p.s.xa+'</td><td class="notes">'+p.s.ex+'</td></tr>'});
+  }else if(st.view==="w"){
+    th='<tr><th>اللاعب</th><th>النادي</th><th>المركز</th><th>مباريات</th><th>أهداف</th><th>صناعة</th><th>خلاصة البطولة</th></tr>';
+    rows.forEach(function(p){body+='<tr><td class="pname">'+p.name+tags(p)+'</td><td>'+p.club+'</td><td><span class="pos-b pos-'+p.pos+'">'+p.pos+'</span></td><td>'+p.w.gp+'</td><td><b>'+p.w.g+'</b></td><td>'+p.w.a+'</td><td class="notes">'+p.w.note+'</td></tr>'});
+  }else{
+    th='<tr><th>اللاعب</th><th>النادي</th><th>المركز</th><th>حالة البري سيزون + المحطة القادمة</th></tr>';
+    rows.forEach(function(p){body+='<tr><td class="pname">'+p.name+tags(p)+'</td><td>'+p.club+'</td><td><span class="pos-b pos-'+p.pos+'">'+p.pos+'</span></td><td class="notes">'+p.p.note+'</td></tr>'});
+  }
+  document.getElementById('th').innerHTML=th;
+  document.getElementById('tb').innerHTML=body||'<tr><td colspan="10" style="padding:20px;color:#64748B">لا نتائج — وسّع الفلاتر</td></tr>';
+  document.getElementById('cnt').textContent=rows.length+" لاعبًا";
+}
+/* ---------- Explorer ---------- */
+var E=[
+ {name:"غيبس-وايت",club:"فورست",pos:"MID",price:7.5,mom:84,score:89,why:"124 نقطة من GW20–38 (الثاني خلف برونو رسميًا!) + 15 هدفًا + راحة الاستبعاد — أقوى زخم تصاعدي موثق بالسوق كله."},
+ {name:"إسماعيلا سار",club:"بالاس",pos:"MID",price:6.0,mom:77,score:80,why:"سادس هدافي المونديال بـ4 أهداف — سيعود بثقة هائلة، والأعين كلها على نجوم أوروبا لا السنغال. عودته متأخرة: هدف GW3+."},
+ {name:"مارك غيهي",club:"بالاس",pos:"DEF",price:5.2,mom:80,score:88,why:"بطل قيمة موثق ودفاع بالاس من أفضل الوحدات سعرًا — هدف الترقية الأول عند أي تحويل. راقب مدربه الجديد (ساج)."},
+ {name:"جيمس تاركوفسكي",club:"إيفرتون",pos:"DEF",price:5.4,mom:78,score:87,why:"آلة DEFCON: ما يعادل 11 شباكًا إضافية (محاكاة 24/25) + راحة صيفية كاملة + استقرار مويس."},
+ {name:"كاويمين كيليهر",club:"برينتفورد",pos:"GK",price:5.0,mom:92,score:86,why:"أفضل حارس في 2026 بالأرقام والأعين على حراس الكبار — في تشكيلتنا فعلًا."},
+ {name:"موريو",club:"فورست",pos:"DEF",price:5.0,mom:76,score:83,why:"38 تدخلًا مؤهلًا وغلاسنر يلعب بثلاثة قلوب دفاع = دقائق أأمن من أي وقت."},
+ {name:"يواكيم أندرسن",club:"فولهام",pos:"DEF",price:4.5,mom:72,score:82,why:"من الأربعة الذين تجاوزوا نسبة تاركوفسكي الدفاعية — بسعر قاع السوق ومدرب مدرسته دفاعية (أربيلوا)."},
+ {name:"دومينيك سوبوسلاي",club:"ليفربول",pos:"MID",price:6.5,mom:82,score:81,why:"مرشح رسمي لدور متقدم تحت إيراولا + راحة كاملة (المجر غائبة) — بديل خاكبو الطبيعي إن ضاقت الميزانية."},
+ {name:"سيب فان دن بيرغ",club:"برينتفورد",pos:"DEF",price:4.5,mom:74,score:81,why:"حقق أقصى النقاط الدفاعية بكل مباراة في بدايات 25/26 — ثنائية دكة برينتفورد مع كيليهر."},
+ {name:"جيمس غارنر",club:"إيفرتون",pos:"MID",price:5.0,mom:73,score:80,why:"تبيّن أنه خامس صنّاع الدوري (7 صناعات) ونال قميص إنجلترا — رُقّي لتشكيلتنا وأثبتت البيانات القرار."},
+ {name:"ماتس فيفر",club:"برايتون",pos:"MID",price:4.9,mom:70,score:79,why:"ثغرة التصنيف: مصنف وسطًا ويلعب ظهيرًا — وسط خامس بسعر مدافع."},
+ {name:"كاسيميرو",club:"مان يونايتد",pos:"MID",price:5.0,mom:71,score:78,why:"ممكّن موثق + أسهل جدول بالدوري — لكن إدخاله يرفعنا لـ3 من يونايتد: بديل مشروط بخروج برونو أو شيشكو."},
+ {name:"فيكتور مونيوز",club:"ليفربول",pos:"MID",price:5.5,mom:79,score:77,why:"7 أهداف و5 صناعات بأوساسونا وعيّنة أسلوب إيراولا — تملك متوقع شبه صفري. راقب دقائقه من 25 يوليو."},
+ {name:"إنزو فرنانديز",club:"تشيلسي",pos:"MID",price:6.5,mom:74,score:76,why:"39 نقطة بأول 6 جولات + ركلات + لا أوروبا — لكن نهائي الغد يؤجله لـGW3–4."},
+ {name:"روبن رويفس",club:"سندرلاند",pos:"GK",price:4.8,mom:70,score:74,why:"صاحب سابقة أول 6 جولات الأسطورية (39 نقطة) — دكة مثالية."},
+ {name:"مدافع برايتون الرخيص",club:"برايتون",pos:"DEF",price:4.5,mom:68,score:72,why:"مدافعو برايتون وُثّقوا كصفقات خفية وهورتسلر مستمر — الاسم يُحسم من وديات أغسطس."},
+ {name:"كالوم ويلسون",club:"انتقال حر",pos:"FWD",price:5.5,mom:66,score:70,why:"ممكّن موثق غادر وست هام الهابط مجانًا — إن حسم وجهته لجدول رحيم فهو حل المهاجم الرخيص الأنظف. تحقق الخميس."},
+ {name:"أنطوان تروفير",club:"بورنموث",pos:"DEF",price:4.8,mom:75,score:64,why:"قيمة موثقة لكن جدول بورنموث الأقسى بالدوري — أدخله بعد GW6 لا قبلها."},
+ {name:"مارتن دوبرافكا",club:"توتنهام",pos:"GK",price:4.5,mom:55,score:58,why:"إن حسم الحراسة لدى دي زيربي فهو أرخص أساسي محتمل — ضبابية الدقائق تؤجل الحكم."},
+ {name:"مهاجم كوفنتري الأساسي",club:"كوفنتري",pos:"FWD",price:5.0,mom:65,score:56,why:"هجوم لامبارد قوي لكن جدولهم الأقسى بين الصاعدين — للمراقبة فقط."}
+];
+var est={pos:"ALL"};
+function setEpos(b){document.querySelectorAll('.fbtn[data-epos]').forEach(function(x){x.classList.remove('on')});b.classList.add('on');est.pos=b.getAttribute('data-epos');renderEx()}
+function renderEx(){
+  var pmax=parseFloat(document.getElementById('priceSel').value);
+  var rows=E.filter(function(p){if(est.pos!=="ALL"&&p.pos!==est.pos)return false;if(p.price>pmax)return false;return true});
+  rows.sort(function(a,b){return b.score-a.score});
+  var h="";
+  rows.forEach(function(p){h+='<tr><td class="pname">'+p.name+'</td><td>'+p.club+'</td><td><span class="pos-b pos-'+p.pos+'">'+p.pos+'</span></td><td><b>'+p.price.toFixed(1)+'</b></td><td>'+p.mom+'</td><td class="notes">'+p.why+'</td><td><b style="font-size:14px">'+p.score+'</b></td></tr>'});
+  document.getElementById('etb').innerHTML=h;
+  document.getElementById('ecnt').textContent=rows.length+" لاعبًا";
+}
+(function(){
+  var seen={},sel=document.getElementById('clubSel');
+  P.forEach(function(p){seen[p.club]=1});
+  Object.keys(seen).sort(function(a,b){return a.localeCompare(b,'ar')}).forEach(function(c){var o=document.createElement('option');o.value=c;o.textContent=c;sel.appendChild(o)});
+})();
+renderDb();renderEx();
+</script>
+</body>
+</html>
