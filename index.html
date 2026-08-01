@@ -178,7 +178,7 @@ tbody td.notes,tbody td.fx{text-align:start;font-size:11.8px;color:var(--muted);
 <div class="topbar">
   <div class="tb-row">
     <h1>غرفة عمليات الفانتزي 2026/27</h1>
-    <span class="vpill">v22 · مُحسّنة رياضيًا</span>
+    <span class="vpill">v23 · بيانات حقيقية</span>
   </div>
   <div class="nav" id="nav">
     <button class="on" data-t="home" onclick="go(this)">🏠 التشكيلة والرئيسية</button>
@@ -517,7 +517,36 @@ tbody td.notes,tbody td.fx{text-align:start;font-size:11.8px;color:var(--muted);
   <div class="sec-title">💎 محرك القيمة v5 — النسخة الحاكمة</div>
   <div class="sec-sub"><b>السكور = [قيمة مركبة معدّلة بالحظ + فيكشر + تغيير جوهري + بري] × مضاعف الدقائق × <span style="color:#B45309">معامل جودة النادي</span> + بلنتي − خصم الانضباط</b><br>
   الأوزان بحسب المركز: دفاع وحراسة 50/25/10/15 · وسط 55/20/10/15 · هجوم 60/15/10/15 · <b>معامل الجودة</b> (إصلاح انحياز الرخص): أرسنال والسيتي ×1.12 · ليفربول ×1.10 · يونايتد ×1.08 · تشيلسي ×1.06 · فيلا ×1.02 · المتوسطون ×0.93–0.97 · سندرلاند وليدز ×0.85 — لأن أندية القمة تخلق فرصًا أكثر فسقف لاعبها أعلى بنيويًا · <b>الانضباط</b>: −3 لمن تجاوز 8 إنذارات و−5 للموقوفين · <b>البريميوم فوق 9.0</b> يُقاس بالشارة لا بالقيمة</div>
-  <div class="sec-title" style="font-size:15px;margin-top:16px">🧤 الحراس</div>
+    <div class="sec-title" style="margin-top:18px">📡 محرك v6 — بيانات حقيقية 100% من API اللعبة (المرحلة 1)</div>
+  <div class="sec-sub"><b>لا تقدير ولا اجتهاد</b>: كل رقم هنا مسحوب حرفيًا من قاعدة FPL الرسمية — النقاط، ن/م (value_season)، DEFCON/90، البطاقات، xG، الحالة الصحية · <b>ومعامل الجودة صار مشتقًا لا مخترعًا</b>: من حقل strength_overall الرسمي بمعادلة <code>1 + 0.25×(قوة الفريق ÷ المتوسط − 1)</code> — أرسنال والسيتي 1.119 · ليفربول ويونايتد وتشيلسي 1.078 · فيلا 1.037 · المتوسطون 0.996 · برايتون وفولهام وليدز ونيوكاسل وسندرلاند 0.955 · الصاعدون 0.914 · <b>ومعامل الحظ صار محسوبًا</b> من نسبة xG إلى الأهداف الفعلية (للهجوم) ومن DEFCON/90 الحقيقي (للدفاع) · التغطية: <b>أرسنال وفيلا كاملين</b></div>
+  <div class="twrap"><table style="min-width:1020px">
+    <thead><tr><th>اللاعب</th><th>نادي</th><th>مركز</th><th>سعر</th><th>نقاطه</th><th>ن/م رسمي</th><th>DC/90</th><th>×حظ محسوب</th><th>×دقائق</th><th>🟨</th><th>💎 v6</th></tr></thead>
+    <tbody>
+      <tr><td class="pname">غابرييل</td><td>ARS</td><td>DEF</td><td><b>8.0</b></td><td>209</td><td><b>26.1</b></td><td>9.07</td><td>×1.05</td><td>×0.95</td><td>4</td><td><b style="font-size:14px">88.4</b></td></tr>
+      <tr><td class="pname">رايا</td><td>ARS</td><td>GK</td><td><b>6.0</b></td><td>162</td><td><b>27.0</b></td><td>0.0</td><td>×1.0</td><td>×0.95</td><td>1</td><td><b style="font-size:14px">87.6</b></td></tr>
+      <tr><td class="pname">رايس</td><td>ARS</td><td>MID</td><td><b>7.5</b></td><td>184</td><td><b>24.5</b></td><td>10.94</td><td>×0.92</td><td>×0.95</td><td>3</td><td><b style="font-size:14px">79.0</b></td></tr>
+      <tr><td class="pname">كاش</td><td>AVL</td><td>DEF</td><td><b>4.5</b></td><td>117</td><td><b>26.0</b></td><td>5.55</td><td>×0.99</td><td>×0.95</td><td>9🟨</td><td><b style="font-size:14px">73.5</b></td></tr>
+      <tr><td class="pname">إ. مارتينيز</td><td>AVL</td><td>GK</td><td><b>5.0</b></td><td>120</td><td><b>24.0</b></td><td>0.0</td><td>×1.0</td><td>×0.95</td><td>2</td><td><b style="font-size:14px">73.3</b></td></tr>
+      <tr><td class="pname">زوبيميندي</td><td>ARS</td><td>MID</td><td><b>5.5</b></td><td>133</td><td><b>24.2</b></td><td>9.24</td><td>×0.82</td><td>×0.95</td><td>4</td><td><b style="font-size:14px">73.2</b></td></tr>
+      <tr><td class="pname">ساكا</td><td>ARS</td><td>MID</td><td><b>9.5</b></td><td>157</td><td><b>16.5</b></td><td>7.47</td><td>×1.03</td><td>×0.95</td><td>2</td><td><b style="font-size:14px">72.6</b></td></tr>
+      <tr><td class="pname">كونسا</td><td>AVL</td><td>DEF</td><td><b>4.5</b></td><td>100</td><td><b>22.2</b></td><td>5.81</td><td>×1.0</td><td>×0.95</td><td>0</td><td><b style="font-size:14px">69.9</b></td></tr>
+      <tr><td class="pname">يوكيريس</td><td>ARS</td><td>FWD</td><td><b>7.5</b></td><td>128</td><td><b>17.1</b></td><td>3.45</td><td>×0.95</td><td>×0.95</td><td>5🟨</td><td><b style="font-size:14px">66.8</b></td></tr>
+      <tr><td class="pname">إيزي</td><td>ARS</td><td>MID</td><td><b>6.5</b></td><td>113</td><td><b>17.4</b></td><td>5.73</td><td>×0.9</td><td>×0.95</td><td>1</td><td><b style="font-size:14px">64.2</b></td></tr>
+      <tr><td class="pname">ديني</td><td>AVL</td><td>DEF</td><td><b>4.5</b></td><td>97</td><td><b>21.6</b></td><td>5.52</td><td>×0.99</td><td>×0.85</td><td>3</td><td><b style="font-size:14px">61.4</b></td></tr>
+      <tr><td class="pname">كالافيوري</td><td>ARS</td><td>DEF</td><td><b>5.5</b></td><td>109</td><td><b>19.8</b></td><td>5.41</td><td>×0.99</td><td>×0.8</td><td>5🟨</td><td><b style="font-size:14px">60.4</b></td></tr>
+      <tr><td class="pname">أوديغارد</td><td>ARS</td><td>MID</td><td><b>6.5</b></td><td>74</td><td><b>11.4</b></td><td>6.74</td><td>×1.05</td><td>×0.8</td><td>0</td><td><b style="font-size:14px">50.7</b></td></tr>
+      <tr><td class="pname">هينكابيه</td><td>ARS</td><td>DEF</td><td><b>5.5</b></td><td>87</td><td><b>15.8</b></td><td>8.61</td><td>×1.04</td><td>×0.7</td><td>2</td><td><b style="font-size:14px">49.3</b></td></tr>
+      <tr><td class="pname">مارتينيلي</td><td>ARS</td><td>MID</td><td><b>6.5</b></td><td>57</td><td><b>8.8</b></td><td>6.51</td><td>×1.05</td><td>×0.7</td><td>3</td><td><b style="font-size:14px">37.1</b></td></tr>
+      <tr><td class="pname">موسكيرا</td><td>ARS</td><td>DEF</td><td><b>5.5</b></td><td>40</td><td><b>7.3</b></td><td>8.67</td><td>×1.04</td><td>×0.7</td><td>4</td><td><b style="font-size:14px">36.5</b></td></tr>
+      <tr><td class="pname">مادويكي</td><td>ARS</td><td>MID</td><td><b>6.5</b></td><td>72</td><td><b>11.1</b></td><td>5.23</td><td>×0.8</td><td>×0.7</td><td>0</td><td><b style="font-size:14px">36.5</b></td></tr>
+      <tr><td class="pname">ميرينو</td><td>ARS</td><td>MID</td><td><b>6.0</b></td><td>67</td><td><b>11.2</b></td><td>9.93</td><td>×0.94</td><td>×0.65</td><td>1</td><td><b style="font-size:14px">36.3</b></td></tr>
+      <tr><td class="pname">مينغز</td><td>AVL</td><td>DEF</td><td><b>4.5</b></td><td>50</td><td><b>11.1</b></td><td>7.28</td><td>×1.02</td><td>×0.6</td><td>1</td><td><b style="font-size:14px">31.7</b></td></tr>
+      <tr><td class="pname">هافيرتز</td><td>ARS</td><td>FWD</td><td><b>7.5</b></td><td>36</td><td><b>4.8</b></td><td>4.99</td><td>×1.05</td><td>×0.6</td><td>1</td><td><b style="font-size:14px">24.0</b></td></tr>
+    </tbody>
+  </table></div>
+  <div class="note red">🔍 <b>خمسة اكتشافات من البيانات الحقيقية:</b> ① <b>ديكلان رايس 79.0 — ثالث القائمة!</b> 184 نقطة بـ7.5 مع <b>376 DEFCON (10.94/90 — أعلى رقم بالبيانات)</b> ورابع صنّاع الدوري وركلات حرة مباشرة أولى وركنيات — <b>لم يكن في حساباتنا إطلاقًا</b> ② <b>زوبيميندي 73.2 بـ5.5</b> (133 نقطة + 307 DEFCON) — أرخص وسط نخبوي ③ <b>كاش 73.5 بـ4.5</b> لكن <b>9 إنذارات</b> = خصم انضباط حقيقي ④ ترتيب البلنتيات رسمي: <b>ساكا أولًا · يوكيريس ثانيًا · أوديغارد ثالثًا</b> ⑤ غابرييل يتصدر بـ88.4 (DEFCON/90 = 9.07) — <b>وتيمبر وساليبا ووايت خرجوا بصفر لأن حالتهم «i» رسميًا</b>.</div>
+  <div class="note">🚧 <b>خارطة إكمال البيانات:</b> ✅ المرحلة 1: معامل الجودة مشتق رسميًا + أرسنال وفيلا · ⏳ المرحلة 2: بورنموث→تشيلسي · ⏳ 3: كوفنتري→ليدز · ⏳ 4: ليفربول→نيوكاسل (هالاند وبرونو وسوبوسلاي) · ⏳ 5: فورست→سندرلاند · ⏳ 6: الاختبار الرجعي · <b>ولا رقم تقديري يدخل هذا الجدول: من لا تتوفر بياناته الرسمية لا يظهر فيه.</b></div>
+<div class="sec-title" style="font-size:15px;margin-top:16px">🧤 الحراس</div>
   <div class="twrap"><table style="min-width:1000px"><thead><tr><th>#</th><th>اللاعب</th><th>النادي</th><th>سعر</th><th>قيمة معدّلة</th><th>فيكشر</th><th>×جودة</th><th>×دقائق</th><th>بلنتي/🟨</th><th>💎 v5</th><th>القراءة</th></tr></thead><tbody>
       <tr><td>1</td><td class="pname">رايا</td><td>أرسنال</td><td><b>6.0</b></td><td>78</td><td>80</td><td>×1.12</td><td>×1.00</td><td>—</td><td><b style="font-size:14px">82.4</b></td><td class="fx">قفاز ذهبي (19 شباكًا) خلف أقل تسديدات على المرمى</td></tr>
       <tr><td>2</td><td class="pname">دوناروما</td><td>السيتي</td><td><b>5.5</b></td><td>70</td><td>85</td><td>×1.12</td><td>×0.95</td><td>—</td><td><b style="font-size:14px">73.8</b></td><td class="fx">0.85 هدف/90 الأفضل — جراحة رودري تمس الصلابة أمامه</td></tr>
